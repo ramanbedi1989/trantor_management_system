@@ -1,0 +1,101 @@
+designations: 
+  - Account Manager
+  - Accounts Executive
+  - Analyst
+  - Assistant Manager - HR
+  - Associate Software Engineer
+  - Business Analyst - Data Services 
+  - Business Operation Manager
+  - Campaign Developer
+  - Campaign Manager
+  - Contractor
+  - Data Analyst
+  - Delivery Manager
+  - Digital Market Team Lead
+  - Director – India Delivery Center
+  - Director - Managed Business Service Unit
+  - HR Executive
+  - Inside Sales Executive
+  - Internet Marketing Team lead
+  - Manager - Finance
+  - Manager - HR
+  - Manager Resourcing
+  - Managing Partner
+  - Operations Manager
+  - Project Coordinator
+  - Project Lead
+  - Project Manager 
+  - Quality Analyst
+  - Senior Analyst
+  - Senior Recruiter
+  - Senior Resercher
+  - Senior Software Engineer
+  - Senior Sys Admin
+  - Senior Technical Writer
+  - SEO/SMO Analyst
+  - Software Engineer
+  - Sr Business Development Executive
+  - Sr. Business Analyst
+  - Sr. DBA
+  - Sr. Engagement Manager – AML
+  - Sr. Executive - Resourcing
+  - Sr. Inside Sales Executive
+  - Sr. IT Manager
+  - Sr. Marketing Executive
+  - Sr. Technical Architect
+  - Sr. Technical Recruiter
+  - Team Lead
+  - Team Lead - Data Entry
+  - Tech Lead
+  - Tech Writer
+  - Technical Architect
+  - Technical Content Writer
+  - Technical Manager
+  - Technical Recruiter
+  - Trainee
+emp_types:
+  - Full time
+  - Contractor
+grades:
+  - L1
+  - L2
+  - L3
+  - L4
+  - L5
+confirmations:
+  - Confirmed
+  - Extended
+  - Probation
+  - NA
+statuses:
+  - Active
+  - Left
+  - Unpaid Leave
+locations:
+  - Chandigarh
+  - Gurgaon
+lta_options:
+  - Monthly
+  - Annual
+med_reimb_options:
+  - Monthly
+  - Quarerly
+marital_statuses:
+  - Married
+  - Single
+loss_of_pays:
+  - LOP
+  - LOP Refund
+leaves:
+  - Sick Leave
+  - Casual Leave
+  - Earned Leave
+  - Maternity Leave
+  - Present But Card Not Shown
+  - Compensatory Off
+genders:
+  - Male
+  - Female
+
+
+

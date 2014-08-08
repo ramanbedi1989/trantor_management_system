@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  leave_credited_date: 2014-08-08 10:57:53
+  leave_id: 1
+  taken: false
+
+two:
+  user_id: 1
+  leave_credited_date: 2014-08-08 10:57:53
+  leave_id: 1
+  taken: false
