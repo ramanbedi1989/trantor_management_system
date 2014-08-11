@@ -15,6 +15,7 @@
 //= require bootstrap-sprockets
 //= require underscore
 //= require calendar.min
+//= require bootstrap-datepicker
 //= require turbolinks
 //= require_tree .
 $(function(){
@@ -41,5 +42,18 @@ $(function(){
       calendar.view($this.data('calendar-view'));
     });
   });
+
+  var leave_date_from = $('#leave_date_from').datepicker({
+    format: "dd/mm/yyyy"
+  });
+
+  leave_date_from.on('changeDate', function(ev){ 
+
+  });
+  
+  leave_date_from.on('show',function(ev){
+  	$(".datepicker.datepicker-dropdown").css('z-index',"1051");
+  });
+  
 });
         
