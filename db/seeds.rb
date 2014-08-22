@@ -5,7 +5,6 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-SeedData = YAML.load_file("#{Rails.root}/db/seeds.yml")
 SeedData["designations"].each do |designation|
   Designation.create(name: designation)
 end
@@ -44,4 +43,5 @@ SeedData["genders"].each do |gender|
 end
 
 Project.create(name: "BDG")
-User.create(username: "raman.bedi")
+User.create(username: "raman.bedi", card_no: "16609047", day_shift: true)
+Holiday.create(name: "Independence Day", date: "15/08/2014".to_date, day_shift: true)

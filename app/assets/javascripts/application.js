@@ -14,46 +14,8 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require underscore
-//= require calendar.min
+//= require calendar
 //= require bootstrap-datepicker
 //= require turbolinks
 //= require_tree .
-$(function(){
-  var options = {
-    tmpl_path: "/calendar_templates/",
-    events_source: function () { return []; },
-    onAfterViewLoad: function(view) {
-      $('#page-header').text(this.getTitle());
-      $('.btn-group button').removeClass('active');
-      $('button[data-calendar-view="' + view + '"]').addClass('active');
-    }
-  };
-  var calendar = $('#calendar').calendar(options);
-  $('.btn-group button[data-calendar-nav]').each(function() {
-    var $this = $(this);
-    $this.click(function() {
-      calendar.navigate($this.data('calendar-nav'));
-    });
-  });
-
-  $('.btn-group button[data-calendar-view]').each(function() {
-    var $this = $(this);
-    $this.click(function() {
-      calendar.view($this.data('calendar-view'));
-    });
-  });
-
-  var leave_date_from = $('#leave_date_from').datepicker({
-    format: "dd/mm/yyyy"
-  });
-
-  leave_date_from.on('changeDate', function(ev){ 
-
-  });
-  
-  leave_date_from.on('show',function(ev){
-  	$(".datepicker.datepicker-dropdown").css('z-index',"1051");
-  });
-  
-});
         

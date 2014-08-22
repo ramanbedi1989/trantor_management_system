@@ -8,6 +8,11 @@ Rails.application.routes.draw do
   end
 
   get '/users/:id', to: 'users#show', as: "users_show"
+  get '/users/:id/events', to: 'users#events', as: "users_events"
+  get '/users/:id/leaves', to: 'users#leaves', as: "users_leaves"
+  post '/users/:id/leaves', to: 'users#leaves', as: "users_deduct_leaves"
+  get '/users/:id/leaves/:leave_id', to: 'users#cancel_leaves_partial', as: "users_cancel_leaves_partial"
+  delete '/users/:id/leaves/:leave_id', to: 'users#cancel_leaves', as: "users_cancel_leaves"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140808093136) do
+ActiveRecord::Schema.define(version: 20140812072800) do
 
   create_table "attendances", force: true do |t|
     t.integer  "user_id"
-    t.datetime "attendance_date"
+    t.date     "attendance_date"
     t.boolean  "present"
-    t.integer  "leave_id"
+    t.integer  "leave_credit_id"
     t.integer  "loss_of_pay_id"
     t.boolean  "half_day_leave",  default: false
     t.datetime "created_at"
@@ -54,22 +54,23 @@ ActiveRecord::Schema.define(version: 20140808093136) do
     t.datetime "updated_at"
   end
 
-  create_table "leave_credits", force: true do |t|
-    t.integer  "user_id"
-    t.datetime "leave_credited_date"
-    t.integer  "leave_id"
-    t.boolean  "consumed",            default: false
+  create_table "holidays", force: true do |t|
+    t.string   "name"
+    t.date     "date"
+    t.boolean  "day_shift"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "leave_requests", force: true do |t|
+  create_table "leave_credits", force: true do |t|
     t.integer  "user_id"
     t.integer  "leave_id"
-    t.datetime "leave_date"
-    t.boolean  "approved"
-    t.boolean  "rejected"
-    t.boolean  "deleted"
+    t.datetime "leave_applied_date"
+    t.datetime "leave_approved_date"
+    t.datetime "leave_credited_date"
+    t.boolean  "consumed",            default: false
+    t.boolean  "approved",            default: false
+    t.boolean  "rejected",            default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -156,6 +157,8 @@ ActiveRecord::Schema.define(version: 20140808093136) do
     t.integer  "med_reimb_option_id"
     t.string   "pf_no"
     t.string   "esi_no"
+    t.integer  "card_no"
+    t.boolean  "day_shift"
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",        default: 0, null: false
     t.datetime "current_sign_in_at"

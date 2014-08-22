@@ -39,6 +39,8 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.integer :med_reimb_option_id
       t.string :pf_no
       t.string :esi_no
+      t.integer :card_no
+      t.boolean :day_shift
 
       ## Recoverable
       #t.string   :reset_password_token

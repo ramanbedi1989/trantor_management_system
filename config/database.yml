@@ -13,6 +13,16 @@ development:
   <<: *default
   database: db/development.sqlite3
 
+attendance:
+  adapter: mysql2
+  host: 192.168.0.50
+  port: 17770
+  timeout: 5000
+  pool: 25
+  username: root
+  password: 
+  database: zkeco_db
+
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.

@@ -1,9 +1,30 @@
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+<div class="row">
+	<div class="col-sm-12">
+		<h3> Leave Balance </h3>
+	</div>
+</div>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<% @leave_name.each do |ln| %>
+				<th><%= ln %></th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<% @leave_balance.each do |lb| %>
+				<th><%= lb %></th>
+			<% end %>
+		</tr>
+	</tbody>
+</table>
+
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#applyLeaveModal">
 	Apply for Leave
 </button>
 
 <div class="row">
-
 	<div class="col-sm-6"><h3 id="page-header"></h3></div>
 	<div class="col-sm-6">
 		<div class="pull-right form-inline">
@@ -26,10 +47,10 @@
 	<div id="calendar"></div>
 </div>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="applyLeaveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<%= form_tag "/search", method: :get, class: "form-horizontal", role: "form" do %>
+			<%= form_tag users_deduct_leaves_path(check_status: false), method: :post, class: "form-horizontal", role: "form" do %>
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 				<h4 class="modal-title" id="myModalLabel">Apply Leave</h4>
@@ -38,23 +59,155 @@
 				<div class="form-group">
 					<%= label_tag :leave_type, "Leave Type", class: "col-sm-4 control-label" %>
 					<div class="col-sm-8">
-						<%= select_tag :leave_type, options_for_select(["CL/EL/CompOff","SL/EL/CompOff","Present But Card Not Shown"]), class: "form-control" %>
+						<%= select_tag :leave_type, options_for_select(User::ALLOWED_LEAVES), class: "form-control" %>
 					</div>
 				</div>
 				<div class="form-group">
 					<%= label_tag :date_from, "Date From", class: "col-sm-4 control-label" %>
 					<div class="col-sm-8">
 						<div id="leave_date_from" class="input-group date">
-							<%= text_field_tag :date_from, "", placeholder: "dd/mm/yyyy", disabled: "true", class: "form-control" %><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+							<%= text_field_tag :date_from, "", placeholder: "dd/mm/yyyy", readonly: "true", class: "form-control" %><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
 						</div>
 					</div>
 				</div>
+				<div class="form-group">
+					<%= label_tag :date_to, "Date To", class: "col-sm-4 control-label" %>
+					<div class="col-sm-8">
+						<div id="leave_date_to" class="input-group date">
+							<%= text_field_tag :date_to, "", placeholder: "dd/mm/yyyy", readonly: "true", class: "form-control" %><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+						</div>
+					</div>
+				</div>
+        <div class="form-group">
+          <%= label_tag :reason, "Reason", class: "col-sm-4 control-label" %>
+          <div class="col-sm-8">
+            <div id="leave_date_from" class="input-group date">
+              <%= text_area_tag :reason, "", placeholder: "Reason for Leave", class: "form-control" %><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+            </div>
+          </div>
+        </div>
+        <div id="response-content">
+          
+        </div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
+				<button type="submit" class="btn btn-primary">Apply Leave</button>
 			</div>
 			<% end %>
 		</div>
 	</div>
 </div>
+
+
+<div class="modal fade" id="cancelLeaveModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h3>Cancel Leave</h3>
+            </div>
+            <div class="modal-body cancel-leaves-content">
+              
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+	$(function(){
+		var options = {
+    tmpl_path: "/calendar_templates/",
+    events_source: "<%= users_events_path %>",
+    onAfterViewLoad: function(view) {
+      $('#page-header').text(this.getTitle());
+      $('.btn-group button').removeClass('active');
+      $('button[data-calendar-view="' + view + '"]').addClass('active');
+    }
+  };
+  var calendar_ele = $('#calendar');
+  if(calendar_ele.length != 0){
+  	var calendar = calendar_ele.calendar(options);
+    $('.btn-group button[data-calendar-nav]').each(function() {
+      var $this = $(this);
+      $this.click(function() {
+        calendar.navigate($this.data('calendar-nav'));
+      });
+    });
+
+    $('.btn-group button[data-calendar-view]').each(function() {
+      var $this = $(this);
+      $this.click(function() {
+        calendar.view($this.data('calendar-view'));
+      });
+    });
+
+    var leave_date_from = $('#leave_date_from');
+    var leave_date_from_datepicker = leave_date_from.datepicker({
+      format: "dd/mm/yyyy"
+    });
+
+    var leave_date_to = $('#leave_date_to');
+    var leave_date_to_datepicker = leave_date_to.datepicker({
+      format: "dd/mm/yyyy"
+    });
+
+    leave_date_from_datepicker.on('changeDate', function(ev){ 
+      leave_date_to.datepicker('setStartDate',ev.date);
+      calculateLeaves();
+      leave_date_from.datepicker('hide');
+    });
+    
+    leave_date_from_datepicker.on('show',function(ev){
+    	$(".datepicker.datepicker-dropdown").css('z-index',"1051");
+    });
+
+
+    leave_date_to_datepicker.on('changeDate', function(ev){ 
+      leave_date_from.datepicker('setEndDate',ev.date);
+      calculateLeaves();
+      leave_date_to.datepicker('hide');
+    });
+    
+    leave_date_to_datepicker.on('show',function(ev){
+      $(".datepicker.datepicker-dropdown").css('z-index',"1051");
+    });
+
+    $("#leave_type").on('change',function(){
+      calculateLeaves();
+    });
+
+    calendar.setOptions({modal: "#cancelLeaveModal"});
+    var calculateLeaves = function(){
+      var date_from = leave_date_from.datepicker('getUTCDate');
+      var date_to = leave_date_to.datepicker('getUTCDate');
+      var invalid_date = "Invalid Date"
+      if(date_from != invalid_date && date_to != invalid_date){
+        $.ajax({
+        	url: "<%= users_leaves_path %>",
+          data: {"date_from": date_from, "date_to": date_to, "leave_type": $("#leave_type").val(), "check_status": true},
+        	success: function(data){
+            var response_div = $('#response-content');    
+            response_div.html("");
+            index = 1
+            response_div.append("Leaves to be deducted <br/>");
+            $.each(data,function(k,v){
+              response_div.append(k);
+              response_div.append(": ");
+              response_div.append(v);
+              if(index != Object.keys(data).length){
+                response_div.append(",");
+              }
+              index++;
+            });
+        	},
+          error: function(data){
+            var response_div = $('#response-content');    
+            response_div.html(data.responseJSON.message);
+          }
+        });
+      }
+    }
+  }
+});
+</script>

@@ -1,0 +1,1 @@
+SeedData = YAML.load_file("#{Rails.root}/db/seeds.yml")

@@ -35,6 +35,8 @@ gem 'underscore-rails'
 gem 'therubyracer'
 gem 'less-rails'
 gem 'bootstrap-datepicker-rails'
+gem 'mysql2', '0.3.13'
+gem 'byebug'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

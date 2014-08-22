@@ -1,0 +1,15 @@
+<%= form_tag users_cancel_leaves_path(@user.id,@leave_credit.id), method: :post, class: "form-horizontal", role: "form" do %>
+<div class="row">
+  <div class="col-sm-12">
+    Do you want to cancel <b><%= @leave_credit.leave.name %> </b> for <b><%= @leave_credit.attendance.attendance_date.strftime("%e %b %Y") %></b>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="pull-right">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary" data-dismiss="modal">Cancel Leave</button>
+  </div>
+  </div>
+</div>
+<% end %>
