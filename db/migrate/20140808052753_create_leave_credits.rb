@@ -3,17 +3,13 @@ class CreateLeaveCredits < ActiveRecord::Migration
     create_table :leave_credits do |t|
       t.integer :user_id
       t.integer :leave_id
-      t.datetime :leave_applied_date
-      t.datetime :leave_approved_date
-      t.datetime :leave_credited_date
+      t.integer :attendance_id
+      t.integer :leave_info_id
+      t.date :leave_credited_date
       t.boolean :consumed, default: false
-      t.boolean :approved, default: false
-      t.boolean :rejected, default: false
-      t.boolean :cancel, default: false
-      t.string :reason
-      t.date :date_from
-      t.date :date_to
-
+      t.boolean :half_day_leave, default: false
+      t.boolean :is_first_half
+      t.integer :other_half_leave_id
 
       t.timestamps
     end

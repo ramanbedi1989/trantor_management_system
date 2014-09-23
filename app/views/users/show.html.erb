@@ -1,3 +1,4 @@
+<% if @leave_name.count > 0 %>
 <div class="row">
 	<div class="col-sm-12">
 		<h3> Leave Balance </h3>
@@ -19,10 +20,16 @@
 		</tr>
 	</tbody>
 </table>
+<% end %>
 
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#applyLeaveModal">
-	Apply for Leave
-</button>
+<div class="row">
+  <div class="col-sm-12">
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#applyLeaveModal">
+  Apply for Leave
+    </button>
+  </div>
+</div>
+
 
 <div class="row">
 	<div class="col-sm-6"><h3 id="page-header"></h3></div>
@@ -34,7 +41,7 @@
 				<button type="button" class="btn btn-primary" data-calendar-nav="next">Next &gt;&gt;</button>
 			</div>
 			<div class="btn-group">
-				<button type="button" class="btn btn-warning" data-calendar-view="year">Year</button>
+				<!-- <button type="button" class="btn btn-warning" data-calendar-view="year">Year</button> -->
 				<button type="button" class="btn btn-warning active" data-calendar-view="month">Month</button>
 				<button type="button" class="btn btn-warning" data-calendar-view="week">Week</button>
 				<button type="button" class="btn btn-warning" data-calendar-view="day">Day</button>
@@ -66,28 +73,32 @@
 					<%= label_tag :date_from, "Date From", class: "col-sm-4 control-label" %>
 					<div class="col-sm-8">
 						<div id="leave_date_from" class="input-group date">
-							<%= text_field_tag :date_from, "", placeholder: "dd/mm/yyyy", readonly: "true", class: "form-control" %><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+							<%= text_field_tag :date_from, "", placeholder: "dd/mm/yyyy", readonly: "true", class: "form-control", required: true %><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
 						</div>
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="form-group date_to_group">
 					<%= label_tag :date_to, "Date To", class: "col-sm-4 control-label" %>
 					<div class="col-sm-8">
 						<div id="leave_date_to" class="input-group date">
-							<%= text_field_tag :date_to, "", placeholder: "dd/mm/yyyy", readonly: "true", class: "form-control" %><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+							<%= text_field_tag :date_to, "", placeholder: "dd/mm/yyyy", readonly: "true", class: "form-control", required: true %><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
 						</div>
 					</div>
 				</div>
         <div class="form-group">
           <%= label_tag :reason, "Reason", class: "col-sm-4 control-label" %>
           <div class="col-sm-8">
-            <div id="leave_date_from" class="input-group date">
-              <%= text_area_tag :reason, "", placeholder: "Reason for Leave", class: "form-control" %><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-            </div>
+            <%= text_area_tag :reason, "", placeholder: "Reason for Leave", class: "form-control", required: true %>
+          </div>
+        </div>
+        <div class="form-group half_day_group">
+          <%= label_tag :half_day_type, "Which part of the day?", class: "col-sm-4 control-label" %>
+          <div class="col-sm-8">
+            <%= select_tag :half_day_type, options_for_select(LeaveCredit::HALF_DAY_LEAVES), class: "form-control" %>
           </div>
         </div>
         <div id="response-content">
-          
+          <%= image_tag "loading.gif", class: "loader" %>
         </div>
 			</div>
 			<div class="modal-footer">
@@ -154,6 +165,12 @@
 
     leave_date_from_datepicker.on('changeDate', function(ev){ 
       leave_date_to.datepicker('setStartDate',ev.date);
+      var leave_type = $("#leave_type");
+      if(leave_type.val() == '<%= User::ALLOWED_LEAVES[5] %>'){
+        leave_date_to.datepicker('setDate',leave_date_from.datepicker('getDate'));
+      }else if(leave_type.val() == '<%= User::ALLOWED_LEAVES[4] %>'){
+        leave_date_to.datepicker('setDate',(leave_date_from.datepicker('getDate') + 83));
+      }
       calculateLeaves();
       leave_date_from.datepicker('hide');
     });
@@ -174,6 +191,18 @@
     });
 
     $("#leave_type").on('change',function(){
+      var $this = $(this);
+      if($this.val() == '<%= User::ALLOWED_LEAVES[5] %>'){
+        $('.half_day_group').show();
+        $('.date_to_group').hide();
+        leave_date_to.datepicker('setDate',leave_date_from.datepicker('getDate'));
+      }else if($this.val() == '<%= User::ALLOWED_LEAVES[4] %>'){
+        $('.date_to_group').hide();
+        leave_date_to.datepicker('setDate',(leave_date_from.datepicker('getDate') + 83));
+      }else{
+        $('.half_day_group').hide();
+        $('.date_to_group').show();
+      }
       calculateLeaves();
     });
 
@@ -184,24 +213,33 @@
       var invalid_date = "Invalid Date"
       if(date_from != invalid_date && date_to != invalid_date){
         $.ajax({
-        	url: "<%= users_leaves_path %>",
+        	url: "<%= users_leaves_path(@user.id) %>",
           data: {"date_from": date_from, "date_to": date_to, "leave_type": $("#leave_type").val(), "check_status": true},
+          beforeSend: function(){
+            $(".loader").show();
+          },
         	success: function(data){
+            $(".loader").hide();
             var response_div = $('#response-content');    
-            response_div.html("");
-            index = 1
-            response_div.append("Leaves to be deducted <br/>");
-            $.each(data,function(k,v){
-              response_div.append(k);
-              response_div.append(": ");
-              response_div.append(v);
-              if(index != Object.keys(data).length){
-                response_div.append(",");
-              }
-              index++;
-            });
+            if(Object.keys(data).length == 0){
+              response_div.html("No leaves to be deducted.");
+            }else{
+              response_div.html("");
+              index = 1
+              response_div.append("Leaves to be deducted <br/>");
+              $.each(data,function(k,v){
+                response_div.append(k);
+                response_div.append(": ");
+                response_div.append(v);
+                if(index != Object.keys(data).length){
+                  response_div.append(",");
+                }
+                index++;
+              });
+            }
         	},
           error: function(data){
+            $(".loader").hide();
             var response_div = $('#response-content');    
             response_div.html(data.responseJSON.message);
           }

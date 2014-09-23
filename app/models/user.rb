@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  ALLOWED_LEAVES = ["CL/EL/CompOff","Sick Leave","Present But Card Not Shown","On Office Duty/Client Side","Maternity Leave"]
+  ALLOWED_LEAVES = ["CL/EL/CompOff", "Sick Leave", "Present But Card Not Shown", "On Office Duty/Client Side", "Maternity Leave", "Half Day Sick Leave"]
   devise :ldap_authenticatable, :rememberable, :trackable
 
   validates :username, presence: true

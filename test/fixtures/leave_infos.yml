@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date_from: 2014-08-25
+  date_to: 2014-08-25
+  reason: MyString
+  leave_applied_date: 2014-08-25
+  leave_approved_date: 2014-08-25
+  approved: false
+  rejected: false
+
+two:
+  date_from: 2014-08-25
+  date_to: 2014-08-25
+  reason: MyString
+  leave_applied_date: 2014-08-25
+  leave_approved_date: 2014-08-25
+  approved: false
+  rejected: false

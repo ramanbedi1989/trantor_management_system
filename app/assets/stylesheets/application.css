@@ -18,10 +18,19 @@
 .cancel-leaves-content{
   font-size: 1.4em;
 }
+
 #response-content{
   font-size: 13px;
   font-weight: bold;
   margin: 2px 0px;
   height: 40px;
   text-align: center;
+}
+
+.half_day_group{
+  display: none;
+}
+
+.loader{
+  display: none;  
 }

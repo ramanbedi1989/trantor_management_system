@@ -2,6 +2,6 @@ class Attendance < ActiveRecord::Base
 
   validates :user_id, presence: true
   belongs_to :user
-  belongs_to :leave_credit
-  belongs_to :loss_of_pay
+  has_one :leave_credit
+  has_one :loss_of_pay_info
 end
