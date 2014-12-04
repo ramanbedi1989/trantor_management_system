@@ -11,12 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140825063116) do
+ActiveRecord::Schema.define(version: 20140925103545) do
 
   create_table "attendances", force: true do |t|
     t.integer  "user_id"
     t.date     "attendance_date"
     t.boolean  "present"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "comp_off_requests", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "days"
+    t.text     "reason"
+    t.boolean  "approved",      default: false
+    t.boolean  "rejected",      default: false
+    t.date     "applied_date"
+    t.date     "approved_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -69,6 +81,7 @@ ActiveRecord::Schema.define(version: 20140825063116) do
     t.boolean  "half_day_leave",      default: false
     t.boolean  "is_first_half"
     t.integer  "other_half_leave_id"
+    t.integer  "comp_off_request_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -82,7 +95,8 @@ ActiveRecord::Schema.define(version: 20140825063116) do
     t.date     "leave_approved_date"
     t.boolean  "approved",            default: false
     t.boolean  "rejected",            default: false
-    t.boolean  "canceled",            default: false
+    t.boolean  "cancelled",           default: false
+    t.boolean  "cancel_request",      default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -144,8 +158,8 @@ ActiveRecord::Schema.define(version: 20140825063116) do
   end
 
   create_table "users", force: true do |t|
-    t.string   "username",                         null: false
-    t.string   "emp_id"
+    t.string   "username",                            null: false
+    t.string   "ecode"
     t.string   "name"
     t.integer  "emp_type_id"
     t.integer  "designation_id"
@@ -157,7 +171,7 @@ ActiveRecord::Schema.define(version: 20140825063116) do
     t.string   "total_exp"
     t.string   "trantor_exp"
     t.string   "prior_exp"
-    t.string   "email_id"
+    t.string   "email"
     t.integer  "confirmation_id"
     t.integer  "status_id"
     t.integer  "location_id"
@@ -179,14 +193,16 @@ ActiveRecord::Schema.define(version: 20140825063116) do
     t.string   "esi_no"
     t.integer  "card_no"
     t.boolean  "day_shift"
+    t.boolean  "active",               default: true
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",        default: 0, null: false
+    t.integer  "sign_in_count",        default: 0,    null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "role"
   end
 
   add_index "users", ["username"], name: "index_users_on_username", unique: true

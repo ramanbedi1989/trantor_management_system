@@ -1,7 +1,7 @@
-<%= form_tag users_cancel_leaves_path(@user.id,@leave_deducted.leave_info.id), method: :delete, class: "form-horizontal", role: "form" do %>
+<%= form_tag users_cancel_leaves_path(@user.id,@leave_deducted.id), method: :delete, class: "form-horizontal", role: "form" do %>
 <div class="row">
   <div class="col-sm-12">
-    Do you want to cancel <b><%= @is_loss_of_pay ? @leave_deducted.loss_of_pay.name : @leave_deducted.leave.name %> </b> from <b><%= @leave_deducted.leave_info.date_from.strftime("%e %b %Y") %> to <%= @leave_deducted.leave_info.date_to.strftime("%e %b %Y") %></b>?
+    Do you want to cancel leaves from <b><%= @leave_deducted.date_from.strftime("%e %b %Y") %> to <%= @leave_deducted.date_to.strftime("%e %b %Y") %></b>?
   </div>
 </div>
 <div class="row">

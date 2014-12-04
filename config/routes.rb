@@ -12,8 +12,14 @@ Rails.application.routes.draw do
   get '/users/:id/events', to: 'users#events', as: "users_events"
   get '/users/:id/leaves', to: 'users#leaves', as: "users_leaves"
   post '/users/:id/leaves', to: 'users#leaves', as: "users_deduct_leaves"
+  post '/users/:id/request_comp_off', to: 'users#request_comp_off', as: "users_request_comp_off"
+  get '/users/:id/comp_offs', to: 'users#comp_offs', as: "users_comp_offs"
   get '/users/:id/leaves/:leave_id', to: 'users#cancel_leaves_partial', as: "users_cancel_leaves_partial"
   delete '/users/:id/leaves/:leave_info_id', to: 'users#cancel_leaves', as: "users_cancel_leaves"
+  get '/managers/:manager_id', to: 'managers#show', as: "managers_show"
+  put '/managers/:manager_id/leave_approval/:leave_id', to: 'managers#leave_approval', as: "managers_leave_approval"
+  put '/managers/:manager_id/compoff_approval/:compoff_id', to: 'managers#compoff_approval', as: "managers_compoff_approval"
+  delete '/managers/:manager_id/leave_cancellation/:leave_id', to: 'managers#leave_cancellation', as: "managers_leave_cancellation"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

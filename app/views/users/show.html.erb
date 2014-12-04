@@ -1,63 +1,57 @@
-<% if @leave_name.count > 0 %>
 <div class="row">
-	<div class="col-sm-12">
-		<h3> Leave Balance </h3>
-	</div>
-</div>
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<% @leave_name.each do |ln| %>
-				<th><%= ln %></th>
-			<% end %>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<% @leave_balance.each do |lb| %>
-				<th><%= lb %></th>
-			<% end %>
-		</tr>
-	</tbody>
-</table>
-<% end %>
-
-<div class="row">
-  <div class="col-sm-12">
-    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#applyLeaveModal">
-  Apply for Leave
-    </button>
+  <div class="col-sm-9">
+    <div class="row">
+      <div class="col-sm-6">
+        <h3 id="page-header"></h3>
+      </div>
+      <div class="col-sm-6">
+        <div class="pull-right form-inline">
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary" data-calendar-nav="prev">&lt;&lt; Prev</button>
+            <button type="button" class="btn btn-primary active" data-calendar-nav="today">Today</button>
+            <button type="button" class="btn btn-primary" data-calendar-nav="next">Next &gt;&gt;</button>
+          </div>
+          <div class="btn-group">
+            <button type="button" class="btn btn-warning active" data-calendar-view="month">Month</button>
+            <button type="button" class="btn btn-warning" data-calendar-view="week">Week</button>
+            <button type="button" class="btn btn-warning" data-calendar-view="day">Day</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div id="calendar"></div>
+      </div>
+    </div>
   </div>
-</div>
-
-
-<div class="row">
-	<div class="col-sm-6"><h3 id="page-header"></h3></div>
-	<div class="col-sm-6">
-		<div class="pull-right form-inline">
-			<div class="btn-group">
-				<button type="button" class="btn btn-primary" data-calendar-nav="prev">&lt;&lt; Prev</button>
-				<button type="button" class="btn btn-primary active" data-calendar-nav="today">Today</button>
-				<button type="button" class="btn btn-primary" data-calendar-nav="next">Next &gt;&gt;</button>
-			</div>
-			<div class="btn-group">
-				<!-- <button type="button" class="btn btn-warning" data-calendar-view="year">Year</button> -->
-				<button type="button" class="btn btn-warning active" data-calendar-view="month">Month</button>
-				<button type="button" class="btn btn-warning" data-calendar-view="week">Week</button>
-				<button type="button" class="btn btn-warning" data-calendar-view="day">Day</button>
-			</div>
-		</div>
-	</div>
-
-</div>
-<div class="row">
-	<div id="calendar"></div>
+  <div class="col-sm-3">
+    <div class="row">
+      <div class="col-sm-12 leave_margin_bottom">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#applyLeaveModal">
+          Apply for Leave
+        </button>
+      </div>
+      <div class="col-sm-12 leave_margin_bottom">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#applyCompOffModal">
+          Request Comp Off
+        </button>
+      </div>
+      <div class="col-sm-12 leave_margin_bottom">
+        <%= link_to "View Comp Off Requests", users_comp_offs_path(current_user), class: "btn btn-primary" %>
+      </div>
+      <% @leave_balance.each do |k,v| %>
+        <div class="col-sm-12">
+          <b><%= k %></b><br/>
+          <%= v %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
 
 <div class="modal fade" id="applyLeaveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<%= form_tag users_deduct_leaves_path(check_status: false), method: :post, class: "form-horizontal", role: "form" do %>
+			<%= form_tag users_deduct_leaves_path(current_user.id, check_status: false), method: :post, class: "form-horizontal", role: "form" do %>
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 				<h4 class="modal-title" id="myModalLabel">Apply Leave</h4>
@@ -100,34 +94,66 @@
         <div id="response-content">
           <%= image_tag "loading.gif", class: "loader" %>
         </div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-primary">Apply Leave</button>
-			</div>
-			<% end %>
-		</div>
-	</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Apply Leave</button>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="applyCompOffModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <%= form_tag users_request_comp_off_path(current_user.id), method: :post, class: "form-horizontal", role: "form" do %>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Apply Compensatory Off</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <%= label_tag :days, "Number of Days", class: "col-sm-4 control-label" %>
+          <div class="col-sm-8">
+            <%= number_field_tag :days, placeholder: "Number of Days" , class: "form-control",required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= label_tag :reason, "Reason", class: "col-sm-4 control-label" %>
+          <div class="col-sm-8">
+            <%= text_area_tag :reason, "", placeholder: "What is the reason for applying?", class: "form-control", required: true %>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Apply Compensatory Off</button>
+      </div>
+      <% end %>
+    </div>
+  </div>
 </div>
 
 
 <div class="modal fade" id="cancelLeaveModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h3>Cancel Leave</h3>
-            </div>
-            <div class="modal-body cancel-leaves-content">
-              
-            </div>
-        </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Cancel Leave</h3>
+      </div>
+      <div class="modal-body cancel-leaves-content">
+
+      </div>
     </div>
+  </div>
 </div>
 
 <script>
-	$(function(){
-		var options = {
+$(function(){
+  var options = {
     tmpl_path: "/calendar_templates/",
     events_source: "<%= users_events_path %>",
     onAfterViewLoad: function(view) {
@@ -163,6 +189,7 @@
       format: "dd/mm/yyyy"
     });
 
+    calculating_leaves = false;
     leave_date_from_datepicker.on('changeDate', function(ev){ 
       leave_date_to.datepicker('setStartDate',ev.date);
       var leave_type = $("#leave_type");
@@ -211,14 +238,15 @@
       var date_from = leave_date_from.datepicker('getUTCDate');
       var date_to = leave_date_to.datepicker('getUTCDate');
       var invalid_date = "Invalid Date"
-      if(date_from != invalid_date && date_to != invalid_date){
+      if(date_from != invalid_date && date_to != invalid_date && !calculating_leaves){
         $.ajax({
         	url: "<%= users_leaves_path(@user.id) %>",
           data: {"date_from": date_from, "date_to": date_to, "leave_type": $("#leave_type").val(), "check_status": true},
           beforeSend: function(){
+            calculating_leaves = true;
             $(".loader").show();
           },
-        	success: function(data){
+          success: function(data){
             $(".loader").hide();
             var response_div = $('#response-content');    
             if(Object.keys(data).length == 0){
@@ -237,15 +265,17 @@
                 index++;
               });
             }
-        	},
+            calculating_leaves = false;
+          },
           error: function(data){
             $(".loader").hide();
             var response_div = $('#response-content');    
             response_div.html(data.responseJSON.message);
+            calculating_leaves = false;
           }
         });
-      }
-    }
-  }
+}
+}
+}
 });
 </script>

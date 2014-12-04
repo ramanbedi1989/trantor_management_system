@@ -10,6 +10,7 @@ class CreateLeaveCredits < ActiveRecord::Migration
       t.boolean :half_day_leave, default: false
       t.boolean :is_first_half
       t.integer :other_half_leave_id
+      t.integer :comp_off_request_id
 
       t.timestamps
     end

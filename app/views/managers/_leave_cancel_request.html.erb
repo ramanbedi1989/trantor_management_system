@@ -1,0 +1,9 @@
+<tr id="leave_cancel_req_<%= leave_cancel_request.id %>">
+  <td><%= leave_cancel_request.user.name %></td>
+  <td><%= show_leaves(leave_cancel_request) %></td>
+  <td><%= leave_cancel_request.date_from %></td>
+  <td><%= leave_cancel_request.date_to %></td>
+  <td>
+    <%= link_to "Cancel", managers_leave_cancellation_path(current_user.id, leave_cancel_request.id), method: :delete %>
+  </td>
+</tr>

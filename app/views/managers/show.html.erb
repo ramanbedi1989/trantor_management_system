@@ -1,0 +1,73 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h3>Leave Requests :</h3>
+  </div>
+  <div class="col-sm-12">
+    <% if @employee_leaves.blank? %>
+      <div class="text-center">You have no leave requests.</div>
+    <% else %>
+    <table class="table datatable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Leaves</th>
+          <th>Date From</th>
+          <th>Date To</th>
+          <th>Reason</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: "employee_leave", collection: @employee_leaves %>
+      </tbody>
+    </table>
+    <% end %>
+  </div>
+  <div class="col-sm-12">
+    <h3>Compensatory Off Requests :</h3>
+  </div>
+  <div class="col-sm-12">
+    <% if @employee_compoff_requests.blank? %>
+      <div class="text-center">You have no Compensatory Off requests.</div>
+    <% else %>
+    <table class="table datatable">
+      <thead>
+        <tr>
+          <td>Name</td>
+          <td>Number of Compensatory Offs</td>
+          <td>Reason</td>
+          <td>Status</td>
+          <td>Action</td>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: "employee_compoff", collection: @employee_compoff_requests %>
+      </tbody>
+    </table>
+    <% end %>
+  </div>
+  <div class="col-sm-12">
+    <h3>Leave Cancellation Requests :</h3>
+  </div>
+  <div class="col-sm-12">
+    <% if @leave_cancel_requests.blank? %>
+      <div class="text-center">You have no leave cancellation requests.</div>
+    <% else %>
+    <table class="table datatable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Leaves</th>
+          <th>Date From</th>
+          <th>Date To</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: "leave_cancel_request", collection: @leave_cancel_requests %>
+      </tbody>
+    </table>
+    <% end %>
+  </div>
+</div>

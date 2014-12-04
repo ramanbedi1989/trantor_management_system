@@ -6,4 +6,5 @@ class LeaveCredit < ActiveRecord::Base
   belongs_to :leave
   belongs_to :attendance
   belongs_to :leave_info
+  belongs_to :comp_off_request
 end

@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  load_and_authorize_resource
+  skip_load_and_authorize_resource only: :info
   def show
     @user = User.find(params[:id])
     if @user
@@ -6,10 +8,10 @@ class UsersController < ApplicationController
       half_day_leave_bal = LeaveCredit.joins(:leave).where("user_id = ? and consumed = ? and half_day_leave = ?", @user.id, false, true).group("leaves.name").count
       full_day_leave_bal.default = 0
       half_day_leave_bal.default = 0
-      @leave_name = [SeedData["leaves"][0], SeedData["leaves"][1], SeedData["leaves"][2], SeedData["leaves"][6]]
-      @leave_balance = []
-      @leave_name.each do |name|
-        @leave_balance << full_day_leave_bal[name] + (half_day_leave_bal[name]/2.0) 
+      leave_name = [SeedData["leaves"][0], SeedData["leaves"][1], SeedData["leaves"][2], SeedData["leaves"][6]]
+      @leave_balance = {}
+      leave_name.each do |name|
+        @leave_balance[name] = full_day_leave_bal[name] + (half_day_leave_bal[name]/2.0) 
       end
     end
   end
@@ -24,6 +26,31 @@ class UsersController < ApplicationController
     end
   end
 
+  def request_comp_off
+    user = User.find(params[:id])
+    no_days = params[:days]
+    reason = params[:reason]
+    if user && no_days && reason && (no_days.to_i > 0)
+      comp_off = CompOffRequest.new(user_id: user.id, days: no_days, reason: reason, applied_date: Date.today)
+      if comp_off.save
+        redirect_to users_show_path(user.id), notice: "Compensatory Off requested successfully."
+      else
+        redirect_to users_show_path(user.id), alert: "Cannot apply Compensatory Off at the moment."
+      end
+    else
+      redirect_to users_show_path(user.id), alert: "Invalid parameters."
+    end
+  end
+
+  def comp_offs
+    user = User.find(params[:id])
+    if user
+      @comp_offs = CompOffRequest.where(user_id: user.id)
+    else
+      redirect_to users_show_path(user.id), alert: "Invalid parameters."
+    end
+  end
+
   def events
     user = User.find(params[:id])
     from_date = Time.at(params[:from].to_i / 1000).to_date
@@ -33,11 +60,11 @@ class UsersController < ApplicationController
       Holiday.where("date >= ? and date <= ? and day_shift = ?", from_date, to_date, user.day_shift).all.each do |h|
         events << Event.new(id: Event.uniq_id(h.class.to_s, h.id), title: h.name, class: "event-info", start: Event.day_start_to_milliseconds(h.date), end: Event.day_end_to_milliseconds(h.date))
       end
-      Attendance.where("user_id = ? and attendance_date >= ? and attendance_date <= ?", user.id, from_date, to_date).each do |a|
+      Attendance.includes([{ leave_credit: [:leave_info] }, :loss_of_pay_info ]).where("user_id = ? and attendance_date >= ? and attendance_date <= ?", user.id, from_date, to_date).each do |a|
         events << Event.new(
           id: Event.uniq_id(a.class.to_s, a.id),
-          title: (a.present? ? "Present" : "Absent"), 
-          class: (a.present? ? "event-success" : "event-inverse"),
+          title: (a.present ? "Present" : "Absent"), 
+          class: (a.present ? "event-success" : "event-inverse"),
           start: Event.day_start_to_milliseconds(a.attendance_date),
           end: Event.day_end_to_milliseconds(a.attendance_date)
           ) if a.attendance_date <= Date.today
@@ -63,7 +90,7 @@ class UsersController < ApplicationController
             id: Event.uniq_id(leave_credit.class.to_s, leave_credit.id),
             title: "#{leave_credit.leave.name} #{half_day_str} - #{leave_status}", 
             class: "event-warning",
-            url: users_cancel_leaves_partial_path(user.id, leave_credit.id),
+            url: users_cancel_leaves_partial_path(user.id, leave_credit.leave_info_id),
             start: Event.day_start_to_milliseconds(a.attendance_date, half_day_str),
             end: Event.day_end_to_milliseconds(a.attendance_date, half_day_str),
             modal: "#cancelLeaveModal",
@@ -75,7 +102,7 @@ class UsersController < ApplicationController
             id: Event.uniq_id(loss_of_pay_info.class.to_s, loss_of_pay_info.id),
             title: "#{loss_of_pay_info.loss_of_pay.name}", 
             class: "event-important",
-            url: users_cancel_leaves_partial_path(user.id, loss_of_pay_info.id, loss_of_pay: true),
+            url: users_cancel_leaves_partial_path(user.id, loss_of_pay_info.leave_info_id),
             start: Event.day_start_to_milliseconds(a.attendance_date),
             end: Event.day_end_to_milliseconds(a.attendance_date),
             modal: "#cancelLeaveModal",
@@ -162,7 +189,7 @@ class UsersController < ApplicationController
       @leave_info = LeaveInfo.create(user_id: user.id, date_from: date_from, date_to: date_to, reason: reason, leave_applied_date: Date.today) unless check_status
       case selected_option
       when 0
-        comp_offs = LeaveCredit.joins(:leave).where("user_id = ? and consumed = ? and leaves.name = ?", user.id, false, SeedData["leaves"][5]).order("date(leave_credited_date)")
+        comp_offs = LeaveCredit.joins(:leave).where("user_id = ? and consumed = ? and leaves.name = ?", user.id, false, SeedData["leaves"][6]).order("date(leave_credited_date)")
         casual_leaves = LeaveCredit.joins(:leave).where("user_id = ? and consumed = ? and leaves.name = ?", user.id, false, SeedData["leaves"][1]).order("date(leave_credited_date)")
         earned_leaves = LeaveCredit.joins(:leave).where("user_id = ? and consumed = ? and leaves.name = ?", user.id, false, SeedData["leaves"][2]).order("date(leave_credited_date)")
         comp_offs.each do |co|
@@ -185,7 +212,7 @@ class UsersController < ApplicationController
         end
         deduct_loss_of_pay(leave_dates, leaves_deducted, user.id, check_status) if leave_dates.count > 0
       when 1
-        comp_offs = LeaveCredit.joins(:leave).where("user_id = ? and consumed = ? and leaves.name = ?", user.id, false, SeedData["leaves"][5]).order("date(leave_credited_date)")
+        comp_offs = LeaveCredit.joins(:leave).where("user_id = ? and consumed = ? and leaves.name = ?", user.id, false, SeedData["leaves"][6]).order("date(leave_credited_date)")
         sick_leaves = LeaveCredit.joins(:leave).where("user_id = ? and consumed = ? and leaves.name = ? and half_day_leave = ?", user.id, false, SeedData["leaves"][0], false).order("date(leave_credited_date)")
         earned_leaves = LeaveCredit.joins(:leave).where("user_id = ? and consumed = ? and leaves.name = ?", user.id, false, SeedData["leaves"][2]).order("date(leave_credited_date)")
         casual_leaves = LeaveCredit.joins(:leave).where("user_id = ? and consumed = ? and leaves.name = ?", user.id, false, SeedData["leaves"][1]).order("date(leave_credited_date)")
@@ -234,31 +261,41 @@ class UsersController < ApplicationController
           create_other_half = true
           leave = LeaveCredit.joins(:leave).where("user_id = ? and consumed = ? and leaves.name = ?", user.id, false, SeedData["leaves"][0]).order("date(leave_credited_date)").first
         end
-        unless check_status
-          leave_dates.each do |d|
-            attendance = Attendance.where(user_id: user.id, attendance_date: d).first_or_create
-            leave.attendance_id = attendance.id 
-            leave.consumed = true
-            leave.leave_info_id = @leave_info.id
-            leave.half_day_leave = true
-            if half_day_type == 0
-              leave.is_first_half = true
-            elsif half_day_type == 1
-              leave.is_first_half = false
+        if leave
+          unless check_status
+            leave_dates.each do |d|
+              attendance = Attendance.where(user_id: user.id, attendance_date: d).first_or_create
+              leave.attendance_id = attendance.id 
+              leave.consumed = true
+              leave.leave_info_id = @leave_info.id
+              leave.half_day_leave = true
+              if half_day_type == 0
+                leave.is_first_half = true
+              elsif half_day_type == 1
+                leave.is_first_half = false
+              end
+              if create_other_half
+                other_leave = LeaveCredit.create(user_id: user.id, leave_id: leave.leave.id, leave_credited_date: leave.leave_credited_date, consumed: false, half_day_leave: true, is_first_half: !leave.is_first_half, other_half_leave_id: leave.id) 
+                leave.other_half_leave_id = other_leave
+              end
+              leave.save
             end
-            if create_other_half
-              other_leave = LeaveCredit.create(user_id: user.id, leave_id: leave.leave.id, leave_credited_date: leave.leave_credited_date, consumed: false, half_day_leave: true, is_first_half: !leave.is_first_half, other_half_leave_id: leave.id) 
-              leave.other_half_leave_id = other_leave
-            end
-            leave.save
           end
+          leaves_deducted[leave.leave.name] += 0.5
+        else
+          if check_status
+            render json: { message: "No sick leaves left." }, status: 400
+          else
+            redirect_to users_show_path(user.id), alert: "No sick leaves left."
+          end
+          return;
         end
-        leaves_deducted[leave.leave.name] += 0.5
       end
       if check_status
         render json: leaves_deducted
       else
-        redirect_to users_show_path(user.id)
+        EmployeeEmails.leave_applied(user, @leave_info).deliver
+        redirect_to users_show_path(user.id), notice: "Leave successfully deducted."
       end
     else
       if check_status
@@ -271,12 +308,7 @@ class UsersController < ApplicationController
 
   def cancel_leaves_partial
     @user = User.find(params[:id])
-    @is_loss_of_pay = params[:loss_of_pay]
-    if @is_loss_of_pay
-      @leave_deducted = LossOfPayInfo.find(params[:leave_id])    
-    else
-      @leave_deducted = LeaveCredit.find(params[:leave_id])
-    end
+    @leave_deducted = LeaveInfo.find_by(user_id: params[:id], id: params[:leave_id])
     if @user && @leave_deducted
       render partial: 'cancel_leaves', format: 'js'
     else
@@ -286,20 +318,22 @@ class UsersController < ApplicationController
 
   def cancel_leaves
     user = User.find(params[:id])
-    leave_info = LeaveInfo.find(params[:leave_info_id])
+    leave_info = LeaveInfo.find_by(user_id: params[:id], id: params[:leave_info_id])
     if user && leave_info
-      leave_info.canceled = true
+      if !leave_info.approved && !leave_info.rejected
+        leave_info.cancelled = true
+        message = "Your leaves have been canceled sucessfully."
+      else
+        leave_info.cancel_request = true
+        message = "Your leaves have been requested for cancellation."
+      end
       if leave_info.save
-        if !leave_info.approved && !leave_info.rejected
-          redirect_to users_show_path(user.id), notice: "Your leaves have been canceled sucessfully."
-        else
-          redirect_to users_show_path(user.id), notice: "Your leaves have been requested for cancellation."
-        end
+        redirect_to users_show_path(user.id), notice: message
       else
         redirect_to users_show_path(user.id), alert: "Could not cancel leave."
       end
     else
-        redirect_to users_show_path(user.id), alert: "Invalid request, could not cancel leave."
+      redirect_to users_show_path(user.id), alert: "Invalid request, could not cancel leave."
     end
   end
 

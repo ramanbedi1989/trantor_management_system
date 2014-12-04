@@ -1,0 +1,21 @@
+<tr id="compoff_req_<%= employee_compoff.id %>">
+  <td><%= employee_compoff.user.name %></td>
+  <td><%= employee_compoff.days %></td>
+  <td title="<%= employee_compoff.reason %>"><%= truncate(employee_compoff.reason, length: 20) %></td>
+  <td>
+    <% if employee_compoff.approved %>
+      Approved
+    <% elsif employee_compoff.rejected %>
+      Rejected
+    <% else %>
+      Pending
+    <% end %>
+  </td>
+  <td>
+    <% if employee_compoff.approved %>
+      <%= link_to "Reject", managers_compoff_approval_path(current_user.id, employee_compoff.id, approval_type: false), method: :put, remote: true %>
+    <% else %>
+      <%= link_to "Approve", managers_compoff_approval_path(current_user.id, employee_compoff.id, approval_type: true), method: :put, remote: true %>
+    <% end %>
+  </td>
+</tr>

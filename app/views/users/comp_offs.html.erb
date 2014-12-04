@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h3>
+      Your Compensatory Offs:
+    </h3>
+  </div>
+  <div class="col-sm-12">
+    <% if @comp_offs.blank? %>
+    You have not requested any comp offs till now.
+    <% else %>
+    <table class="table datatable">
+      <thead>
+        <tr>
+          <th>Number of Days</th>
+          <th>Reason</th>
+          <th>Status</th>
+          <th>Requested On</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @comp_offs.each do |comp_off| %>
+        <tr>
+          <td><%= comp_off.days %></td>
+          <td title="<%= comp_off.reason %>"><%= truncate(comp_off.reason, length: 20) %></td>
+          <td>
+            <% if comp_off.approved %>
+            Approved
+            <% elsif comp_off.rejected %>
+            Rejected
+            <% else%>
+            Pending
+            <% end %>
+          </td>
+          <td><%= format_date(comp_off.created_at) %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% end %>
+  </div>
+</div>

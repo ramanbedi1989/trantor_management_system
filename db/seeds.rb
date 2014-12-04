@@ -43,5 +43,6 @@ SeedData["genders"].each do |gender|
 end
 
 Project.create(name: "BDG")
-User.create(username: "raman.bedi", card_no: "16609047", day_shift: true)
+u = User.create(username: "raman.bedi", name: "Raman Bedi", card_no: "16609047", day_shift: true, role: "admin", gender_id: 1, ecode: "e00031", email: "raman.bedi@trantorinc.com")
+User.create(username: "navpreet.singh", name: "Navpreet Singh", card_no: "6212341", day_shift: true, role: "employee", manager_id: u.id, gender_id: 1, ecode: "e00156", email: "navpreet.singh@trantorinc.com")
 Holiday.create(name: "Independence Day", date: "15/08/2014".to_date, day_shift: true)

@@ -9,7 +9,8 @@ class CreateLeaveInfos < ActiveRecord::Migration
       t.date :leave_approved_date
       t.boolean :approved, default: false
       t.boolean :rejected, default: false
-      t.boolean :canceled, default: false
+      t.boolean :cancelled, default: false
+      t.boolean :cancel_request, default: false
 
       t.timestamps
     end

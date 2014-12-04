@@ -1,0 +1,6 @@
+<% if @compoff_data[:success] %>
+  $("#compoff_req_<%= @compoff_data[:compoff].id %>").html($("<%= j render partial: "employee_compoff", locals: { employee_compoff: @compoff_data[:compoff] } %>").html());
+  $("<%= j render partial: "layouts/bootstrap_alert", locals: { content: "Compensatory Off updated successfully", alert_type: "success" } %>").insertAfter(".row.header");
+<% else %>
+  $("<%= j render partial: "layouts/bootstrap_alert", locals: { content: "Could not update Compensatory Off", alert_type: "danger" } %>").insertAfter(".row.header");
+<% end %>

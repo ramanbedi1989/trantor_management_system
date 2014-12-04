@@ -1,0 +1,6 @@
+<% if @leave_data[:success] %>
+  $("#leave_req_<%= @leave_data[:leave].id %>").html($("<%= j render partial: "employee_leave", locals: { employee_leave: @leave_data[:leave] } %>").html());
+  $("<%= j render partial: "layouts/bootstrap_alert", locals: { content: "Leave updated successfully", alert_type: "success" } %>").insertAfter(".row.header");
+<% else %>
+  $("<%= j render partial: "layouts/bootstrap_alert", locals: { content: "Could not update leave", alert_type: "danger" } %>").insertAfter(".row.header");
+<% end %>

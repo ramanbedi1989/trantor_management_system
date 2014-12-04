@@ -1,0 +1,23 @@
+<tr id="leave_req_<%= employee_leave.id %>">
+  <td><%= employee_leave.user.name %></td>
+  <td><%= show_leaves(employee_leave) %></td>
+  <td><%= employee_leave.date_from %></td>
+  <td><%= employee_leave.date_to %></td>
+  <td title="<%= employee_leave.reason %>"><%= truncate(employee_leave.reason, length: 20) %></td>
+  <td>
+    <% if employee_leave.approved %>
+      Approved
+    <% elsif employee_leave.rejected %>
+      Rejected
+    <% else %>
+      Pending
+    <% end %>
+  </td>
+  <td>
+    <% if employee_leave.approved %>
+      <%= link_to "Reject", managers_leave_approval_path(current_user.id, employee_leave.id, approval_type: false), method: :put, remote: true %>
+    <% else %>
+      <%= link_to "Approve", managers_leave_approval_path(current_user.id, employee_leave.id, approval_type: true), method: :put, remote: true %>
+    <% end %>
+  </td>
+</tr>
