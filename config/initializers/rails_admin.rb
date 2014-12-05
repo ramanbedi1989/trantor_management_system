@@ -33,4 +33,10 @@ RailsAdmin.config do |config|
     # history_index
     # history_show
   end
+
+
+  config.navigation_static_links = {
+    'Loss Of Pay Data' => '/admin/reports/loss_of_pays'
+  }
+  #config.navigation_static_label = "Reports"
 end
