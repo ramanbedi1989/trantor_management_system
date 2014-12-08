@@ -1,5 +1,23 @@
 <div class="row">
 	<div class="col-sm-12">
-		<h3>Loss of Pay Reports</h3>
+		<h1>Loss of Pay Reports</h1>
 	</div>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Created At</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @loss_of_pays.each do |lop| %>
+       <tr>
+         <td><%=lop.id%></td>
+         <td><%=lop.name%></td>
+         <td> <%=lop.created_at.strftime('%d-%h-%Y')%> </td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
 </div>
