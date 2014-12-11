@@ -2,22 +2,31 @@
 	<div class="col-sm-12">
 		<h1>Loss of Pay Reports</h1>
 	</div>
-  <table class="table">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Created At</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @loss_of_pays.each do |lop| %>
-       <tr>
-         <td><%=lop.id%></td>
-         <td><%=lop.name%></td>
-         <td> <%=lop.created_at.strftime('%d-%h-%Y')%> </td>
-        </tr>
-    <% end %>
-    </tbody>
-  </table>
+
+    <form role="form" action="<%=admin_reports_path(report_type: 'lop')%>" method="POST">
+        <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+        <div class="col-sm-3 form-group">
+          Employee Code:
+          <input type="text" class="form-control"/>
+        </div>
+        <div class="col-sm-3 form-group">
+            Project
+            <select name="" id=""  class="form-control">
+                <option value="">Select</option>
+                <option value="">Zan</option>
+            </select>
+        </div>
+        <div class="col-sm-3 form-group">
+          From(Month)
+          <%=from_select_box%>
+        </div>
+      <div class="col-sm-3 form-group">
+        To (Month)
+        <%=to_select_box%>
+      </div>
+      <div class="col-sm-12 form-group" style="margin-top:20px;">
+        <input type="submit" value="Download CSV"/>
+      </div>
+
+    </form>
 </div>
