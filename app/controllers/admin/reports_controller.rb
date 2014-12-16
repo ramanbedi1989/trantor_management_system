@@ -5,10 +5,18 @@ class Admin::ReportsController < ApplicationController
   end
 
   def create
+    @report = Report.new(params)
+    unless @report.valid?
+      return render action: :loss_of_pays
+    end
     case params[:report_type].downcase
       when 'lop'
-       
+        @result = @report.generate_lop_report
+        logger.info "======================"
+        logger.info @result.inspect
+        logger.info "======================"
       when 'lopRefund'
+        @report.print_lop_refunt
     end
   end
 

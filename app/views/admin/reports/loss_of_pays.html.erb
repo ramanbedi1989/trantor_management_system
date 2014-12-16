@@ -7,22 +7,26 @@
         <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
         <div class="col-sm-3 form-group">
           Employee Code:
-          <input type="text" class="form-control"/>
+          <input type="text" class="form-control" name="ecode" value="<%=params[:ecode] %>"/>
+          <span class="error help-block"><%=@report.errors[:ecode].join(",") if @report && @report.errors[:ecode]%></span>
         </div>
         <div class="col-sm-3 form-group">
             Project
-            <select name="" id=""  class="form-control">
-                <option value="">Select</option>
-                <option value="">Zan</option>
-            </select>
+          <%=select_tag 'project_id', options_for_select(Project.all.collect{|p| [p.name, p.id ]},  params[:project_id]), { :prompt => "Select", class: 'form-control'}%>
+          <span class="error help-block"><%=@report.errors[:project_id].join(",") if @report && @report.errors[:project_id]%></span>
         </div>
         <div class="col-sm-3 form-group">
-          From(Month)
+          From(Date)
           <%=from_select_box%>
+          <span class="error help-block"><%=@report.errors[:from_date].join(",") if @report && @report.errors[:from_date]%></span>
         </div>
       <div class="col-sm-3 form-group">
-        To (Month)
+        To(Date)
         <%=to_select_box%>
+        <span class="error help-block"><%=@report.errors[:to_date].join(",") if @report && @report.errors[:to_date]%></span>
+      </div>
+      <div class="col-sm-12">
+        <span class="help-block error"><%=@report.errors[:base].join(",") if @report && @report.errors[:base]%></span>
       </div>
       <div class="col-sm-12 form-group" style="margin-top:20px;">
         <input type="submit" value="Download CSV"/>
