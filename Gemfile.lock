@@ -147,6 +147,8 @@ GEM
       json (~> 1.4)
     ref (1.0.5)
     remotipart (1.2.1)
+    rufus-scheduler (3.0.9)
+      tzinfo
     safe_yaml (1.0.3)
     sass (3.2.19)
     sass-rails (4.0.3)
@@ -211,6 +213,7 @@ DEPENDENCIES
   quiet_assets
   rails (= 4.1.4)
   rails_admin
+  rufus-scheduler
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
   spring

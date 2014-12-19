@@ -1,5 +1,6 @@
 require 'calculate_attendance'
 require 'increment_leaves'
+
 namespace :scheduled_tasks do
   desc "Fetch attendance for the previous day"
   task fetch_previous_day_attendance: :environment do 
@@ -23,4 +24,10 @@ namespace :scheduled_tasks do
   task increment_earned_leaves: :environment do 
     #todo
   end
+end
+
+task :attendance do
+  puts "--> Executing the attendance fetching task"
+  Rake::Task["scheduled_tasks:fetch_previous_day_attendance"].invoke 
+  puts "--> Task executed. Please check logs.."
 end
