@@ -48,16 +48,16 @@ class Report
     FileUtils.mkdir('csv') rescue ['csv']
     start_date = Date.parse(@from_date)
     end_date = Date.parse(@to_date)
-    puts "#{start_date}"
-    puts "#{end_date}"
     filename = "#{Rails.root}/csv/lopDate#{rand(Time.now.strftime("%s").to_i)}.csv"
     File.open(filename, 'w') do |file|
+      ## HEADER ##
       file.write("")
       start_date.step(end_date).each do |date|
         file.write(",")
         file.write(date)
       end
       file.write("\n")
+    ## LOP DATA ##
     data.each_pair do |user_id, lop_days|                         #lop_days is an array
       file.write("#{ user_id}")
       start_date.step(end_date).each do |date|
@@ -76,6 +76,7 @@ class Report
 
 
   def generate_lop_report_refund_report
+    # TO BE DONE
   end
 
 
@@ -84,7 +85,7 @@ class Report
 
   protected
 
-
+  # VALIDATE
   def selection_of_project_and_emp_code
     if @project_id.blank? && @ecode.blank?
       return self.errors.add(:base, "Please select either Ecode or Project Name")
