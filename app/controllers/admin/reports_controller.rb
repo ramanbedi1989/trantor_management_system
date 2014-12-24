@@ -11,10 +11,8 @@ class Admin::ReportsController < ApplicationController
     end
     case params[:report_type].downcase
       when 'lop'
-        @result = @report.generate_lop_report
-        logger.info "======================"
-        logger.info @result.inspect
-        logger.info "======================"
+        file = @report.generate_lop_report
+        send_file(file)
       when 'lopRefund'
         @report.print_lop_refunt
     end

@@ -19,7 +19,7 @@ class Report
 
 
   def generate_lop_report
-    if @ecode
+    if !@ecode.blank?
       @loss_of_pays = LossOfPayInfo.joins(:attendance => :user).where("attendances.user_id=?", @user.id)
       .where("DATE(attendances.attendance_date) >= ? AND DATE(attendances.attendance_date) <= ? ", Date.parse(@from_date), Date.parse(@to_date))
       .where("loss_of_pay_infos.loss_of_pay_id=?", LossOfPay.lop.id)
@@ -27,8 +27,7 @@ class Report
       users_ids = @project.users.collect(&:id)
       @loss_of_pays = LossOfPayInfo.joins(:attendance => :user).where("user_id IN (?)", users_ids)
     end
-    #generate_csv(lop_dates_by_user_id)
-    lop_dates_by_user_id
+    generate_csv(lop_dates_by_user_id)
   end
 
 
@@ -44,15 +43,15 @@ class Report
 
   def generate_csv(data = {})
     raise "No data exists" if data.blank?
-    puts "==================="
+    puts "--> Fetched Data is:-"
     puts data.inspect
     FileUtils.mkdir('csv') rescue ['csv']
     start_date = Date.parse(@from_date)
     end_date = Date.parse(@to_date)
     puts "#{start_date}"
     puts "#{end_date}"
-    puts "==================="
-    File.open("#{Rails.root}/csv/lopDate#{rand(Time.now.strftime("%s").to_i)}.csv", 'w') do |file|
+    filename = "#{Rails.root}/csv/lopDate#{rand(Time.now.strftime("%s").to_i)}.csv"
+    File.open(filename, 'w') do |file|
       file.write("")
       start_date.step(end_date).each do |date|
         file.write(",")
@@ -63,7 +62,6 @@ class Report
       file.write("#{ user_id}")
       start_date.step(end_date).each do |date|
         day = date.day
-        p lop_days & [day]
           unless (lop_days & [day]).blank?
             file.write(",LOP")
           else
@@ -73,6 +71,7 @@ class Report
         file.write("\n")
       end
     end
+    return filename
   end
 
 
@@ -90,10 +89,10 @@ class Report
     if @project_id.blank? && @ecode.blank?
       return self.errors.add(:base, "Please select either Ecode or Project Name")
     end
-    if @ecode
+    if !@ecode.blank?
       @user = User.find_by_ecode(@ecode)
       self.errors.add(:ecode, "Invalid Employee Code") unless @user
-    elsif @project_id
+    elsif !@project_id.blank?
       @project  = Project.includes(:users).where(id: @project_id).first
       self.errors.add(:project_id, "Invalid Project Selected") unless @project
     end
