@@ -37,4 +37,8 @@ class User < ActiveRecord::Base
   def role_enum
     ROLES
   end
+
+  def self.find_managers
+    where(role: 'manager')
+  end
 end
