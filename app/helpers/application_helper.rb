@@ -39,16 +39,9 @@ module ApplicationHelper
   def create_select_options(start_day, select_name)
     options = []
     today = Date.today
-    # Date::MONTHNAMES[1..-1].each do |month|
-    #   options << [month, "#{ start_day }/#{ month }/#{ Date.today.year }"]
-    # end
-    if(select_name == 'from_date')
-      prev_month = today.month-1
-      date = "#{start_day}/#{prev_month}/#{today.year}"
-    else
-      date = "#{start_day}/#{today.month}/#{today.year}"
-    end
-    options << [date, date]
+    Date::MONTHNAMES[1..-1].each do |month|
+      options << ["#{ month }-#{ Date.today.year }", "#{ start_day }/#{ month }/#{ Date.today.year }"]
+    end  
     (select_tag "#{ select_name }", options_for_select(options), {class: 'form-control'}).html_safe
   end
 

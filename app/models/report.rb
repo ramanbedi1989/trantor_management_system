@@ -15,6 +15,7 @@ class Report
     @project_id = params[:project_id]
     @from_date = params[:from_date]
     @to_date   = params[:to_date]
+    @manager_id   = params[:manager_id]
   end
 
 
@@ -22,16 +23,22 @@ class Report
     if !@ecode.blank?
       @loss_of_pays = LossOfPayInfo.joins(:attendance => :user).where("attendances.user_id=?", @user.id)
       .where("DATE(attendances.attendance_date) >= ? AND DATE(attendances.attendance_date) <= ? ", Date.parse(@from_date), Date.parse(@to_date))
-      .where("loss_of_pay_infos.loss_of_pay_id=?", LossOfPay.lop.id)
     elsif @project
       users_ids = @project.users.collect(&:id)
       @loss_of_pays = LossOfPayInfo.joins(:attendance => :user).where("user_id IN (?)", users_ids)
+      .where("DATE(attendances.attendance_date) >= ? AND DATE(attendances.attendance_date) <= ? ", Date.parse(@from_date), Date.parse(@to_date))
+    elsif @manager_id
+      users_ids = User.where(manager_id: @manager_id).collect(&:id)
+      @loss_of_pays = LossOfPayInfo.joins(:attendance => :user).where("user_id IN (?)", users_ids)
+      .where("DATE(attendances.attendance_date) >= ? AND DATE(attendances.attendance_date) <= ? ", Date.parse(@from_date), Date.parse(@to_date))
     end
     generate_csv(lop_dates_by_user_id)
   end
 
 
   def lop_dates_by_user_id()
+    Rails.logger.info "**************"
+    Rails.logger.info @loss_of_pays.inspect
     return {}  if @loss_of_pays.blank?
     lop_infos = Hash.new
     @loss_of_pays.each do |lop|
@@ -87,16 +94,17 @@ class Report
 
   # VALIDATE
   def selection_of_project_and_emp_code
-    if @project_id.blank? && @ecode.blank?
-      return self.errors.add(:base, "Please select either Ecode or Project Name")
+    if @project_id.blank? && @ecode.blank? && @manager_id.blank?
+      return self.errors.add(:base, "Please select either Ecode or Project Name Or Manager")
     end
     if !@ecode.blank?
       @user = User.find_by_ecode(@ecode)
       self.errors.add(:ecode, "Invalid Employee Code") unless @user
     elsif !@project_id.blank?
       @project  = Project.includes(:users).where(id: @project_id).first
-      self.errors.add(:project_id, "Invalid Project Selected") unless @project
+      self.errors.add(:project_id, "Invalid Project Selected") unless @project    
     end
+
   end
 
 

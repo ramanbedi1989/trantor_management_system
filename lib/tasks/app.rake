@@ -11,6 +11,7 @@ namespace :app do
   end
 
   desc "This task will create users with manager role"
+  # rake app:create_managers
   task :create_managers => :environment do
     ['Gurdeep', 'Vibhor', 'Harish'].each do |user|
       puts "--> Adding #{user}"
