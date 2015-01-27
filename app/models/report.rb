@@ -37,13 +37,12 @@ class Report
 
 
   def lop_dates_by_user_id()
-    Rails.logger.info "**************"
-    Rails.logger.info @loss_of_pays.inspect
     return {}  if @loss_of_pays.blank?
     lop_infos = Hash.new
     @loss_of_pays.each do |lop|
-      lop_infos[lop.user.username] ||= Array.new
-      lop_infos[lop.user.username].push(lop.attendance_date.day)
+      lop_infos[lop.user.username] ||= Hash.new
+      #lop_infos[lop.user.username].push(lop.attendance_date.day)
+      lop_infos[lop.user.username].merge!({lop.attendance_date.day => (lop.refund? ? "LOP Refund" : "LOP")})
     end
     lop_infos
   end
@@ -51,29 +50,29 @@ class Report
   def generate_csv(data = {})
     raise "No data exists" if data.blank?
     puts "--> Fetched Data is:-"
-    puts data.inspect
+    puts data.inspect    
     FileUtils.mkdir('csv') rescue ['csv']
     start_date = Date.parse(@from_date)
     end_date = Date.parse(@to_date)
-    filename = "#{Rails.root}/csv/lopDate#{rand(Time.now.strftime("%s").to_i)}.csv"
+    filename = "#{ Rails.root }/csv/lopDate#{rand(Time.now.strftime("%s").to_i)}.csv"
     File.open(filename, 'w') do |file|
       ## HEADER ##
       file.write("")
       start_date.step(end_date).each do |date|
         file.write(",")
-        file.write(date)
+        file.write(date.strftime("%d-%m-%Y"))
       end
       file.write("\n")
-    ## LOP DATA ##
-    data.each_pair do |user_id, lop_days|                         #lop_days is an array
-      file.write("#{ user_id}")
+    ## LOP DATA ##      
+    data.each_pair do |username, lops_hash|                         #lop_days is an array    
+      file.write("#{ username }")
       start_date.step(end_date).each do |date|
-        day = date.day
-          unless (lop_days & [day]).blank?
-            file.write(",LOP")
-          else
-            file.write(",")
-          end
+        day = date.day       
+        unless (lops_hash.keys & [day]).blank?
+          file.write("," + lops_hash[day].to_s)
+        else
+          file.write(",")
+         end
         end
         file.write("\n")
       end

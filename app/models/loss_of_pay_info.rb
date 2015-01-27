@@ -7,4 +7,12 @@ class LossOfPayInfo < ActiveRecord::Base
   delegate :attendance_date, :to => :attendance
 
 
+  def lop?
+  	loss_of_pay == LossOfPay.lop
+  end
+
+  def refund?
+  	loss_of_pay == LossOfPay.lop_refund
+  end
+
 end
