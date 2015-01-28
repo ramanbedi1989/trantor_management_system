@@ -38,11 +38,13 @@ class Report
 
   def lop_dates_by_user_id()
     return {}  if @loss_of_pays.blank?
+    Rails.logger.debug @loss_of_pays.inspect
     lop_infos = Hash.new
     @loss_of_pays.each do |lop|
-      lop_infos[lop.user.username] ||= Hash.new
-      #lop_infos[lop.user.username].push(lop.attendance_date.day)
-      lop_infos[lop.user.username].merge!({lop.attendance_date.day => (lop.refund? ? "LOP Refund" : "LOP")})
+      #lop_infos[lop.user.username]||= Hash.new     
+      #lop_infos[lop.user.username].merge!({lop.attendance_date.day => (lop.refund? ? "LOP Refund" : "LOP")})
+      lop_infos[lop.user]||=Hash.new
+      lop_infos[lop.user].merge!({lop.attendance_date.day => (lop.refund? ? "LOP Refund" : "LOP")})       
     end
     lop_infos
   end
@@ -54,18 +56,18 @@ class Report
     FileUtils.mkdir('csv') rescue ['csv']
     start_date = Date.parse(@from_date)
     end_date = Date.parse(@to_date)
-    filename = "#{ Rails.root }/csv/lopDate#{rand(Time.now.strftime("%s").to_i)}.csv"
+    filename = "#{ Rails.root }/csv/lopReport_#{rand(Time.now.strftime("%s").to_i)}.csv"
     File.open(filename, 'w') do |file|
       ## HEADER ##
-      file.write("")
+      file.write("username, ecode, Manager, Project")
       start_date.step(end_date).each do |date|
         file.write(",")
         file.write(date.strftime("%d-%m-%Y"))
       end
       file.write("\n")
     ## LOP DATA ##      
-    data.each_pair do |username, lops_hash|                         #lop_days is an array    
-      file.write("#{ username }")
+    data.each_pair do |user, lops_hash|                         #lop_days is an array    
+      file.write("#{ user.username }, #{ user.ecode }, #{ user.manager.try(:name) }, #{ user.c_projects }")
       start_date.step(end_date).each do |date|
         day = date.day       
         unless (lops_hash.keys & [day]).blank?

@@ -42,7 +42,7 @@ module ApplicationHelper
     Date::MONTHNAMES[1..-1].each do |month|
       options << ["#{ month }-#{ Date.today.year }", "#{ start_day }/#{ month }/#{ Date.today.year }"]
     end  
-    (select_tag "#{ select_name }", options_for_select(options), {class: 'form-control'}).html_safe
+    (select_tag "#{ select_name }", options_for_select(options), {class: 'form-control', id: select_name}).html_safe
   end
 
 end

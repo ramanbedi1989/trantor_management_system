@@ -28,12 +28,12 @@
           </div>
           <div class="form-group">
             From(Date)
-            <%=from_select_box%>
+             <input class="form-control" type="text" name='from_date' id="from_date" placeholder="DD/MM/YY" value="<%=params[:from_date]%>">
             <span class="error help-block"><%=@report.errors[:from_date].join(",") if @report && @report.errors[:from_date]%></span>
           </div>
         <div class="form-group">
           To(Date)
-          <%=to_select_box%>
+          <input class="form-control" type="text" name='to_date' id="to_date" placeholder="DD/MM/YY" value="<%=params[:to_date]%>">
           <span class="error help-block"><%=@report.errors[:to_date].join(",") if @report && @report.errors[:to_date]%></span>
         </div>
         <div class="col-sm-12">
@@ -45,3 +45,10 @@
       </div>
     </form>
 </div>
+
+
+<script type="text/javascript">
+  jQuery(function($){
+    $("#from_date, #to_date").datepicker({format: 'dd/mm/yyyy'})
+  })
+</script>

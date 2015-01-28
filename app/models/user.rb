@@ -41,4 +41,9 @@ class User < ActiveRecord::Base
   def self.find_managers
     where(role: 'manager')
   end
+
+  def c_projects
+    projects.map(&:name).join(',')
+  end
+
 end
