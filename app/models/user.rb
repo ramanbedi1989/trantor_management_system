@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
   end
 
   def c_projects
-    projects.map(&:name).join(',')
+    projects.map(&:name).join(';')
   end
 
 end

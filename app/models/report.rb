@@ -16,19 +16,24 @@ class Report
     @from_date = params[:from_date]
     @to_date   = params[:to_date]
     @manager_id   = params[:manager_id]
+    @all = (params[:all_employees] && params[:all_employees] == '1')
   end
 
 
-  def generate_lop_report
+  def generate_lop_report  
     if !@ecode.blank?
       @loss_of_pays = LossOfPayInfo.joins(:attendance => :user).where("attendances.user_id=?", @user.id)
       .where("DATE(attendances.attendance_date) >= ? AND DATE(attendances.attendance_date) <= ? ", Date.parse(@from_date), Date.parse(@to_date))
-    elsif @project
+    elsif !@project.blank?
       users_ids = @project.users.collect(&:id)
       @loss_of_pays = LossOfPayInfo.joins(:attendance => :user).where("user_id IN (?)", users_ids)
       .where("DATE(attendances.attendance_date) >= ? AND DATE(attendances.attendance_date) <= ? ", Date.parse(@from_date), Date.parse(@to_date))
-    elsif @manager_id
+    elsif !@manager_id.blank?
       users_ids = User.where(manager_id: @manager_id).collect(&:id)
+      @loss_of_pays = LossOfPayInfo.joins(:attendance => :user).where("user_id IN (?)", users_ids)
+      .where("DATE(attendances.attendance_date) >= ? AND DATE(attendances.attendance_date) <= ? ", Date.parse(@from_date), Date.parse(@to_date))
+    elsif @all
+      users_ids = User.all.collect(&:id)
       @loss_of_pays = LossOfPayInfo.joins(:attendance => :user).where("user_id IN (?)", users_ids)
       .where("DATE(attendances.attendance_date) >= ? AND DATE(attendances.attendance_date) <= ? ", Date.parse(@from_date), Date.parse(@to_date))
     end
@@ -38,11 +43,8 @@ class Report
 
   def lop_dates_by_user_id()
     return {}  if @loss_of_pays.blank?
-    Rails.logger.debug @loss_of_pays.inspect
     lop_infos = Hash.new
     @loss_of_pays.each do |lop|
-      #lop_infos[lop.user.username]||= Hash.new     
-      #lop_infos[lop.user.username].merge!({lop.attendance_date.day => (lop.refund? ? "LOP Refund" : "LOP")})
       lop_infos[lop.user]||=Hash.new
       lop_infos[lop.user].merge!({lop.attendance_date.day => (lop.refund? ? "LOP Refund" : "LOP")})       
     end
@@ -51,8 +53,6 @@ class Report
 
   def generate_csv(data = {})
     raise "No data exists" if data.blank?
-    puts "--> Fetched Data is:-"
-    puts data.inspect    
     FileUtils.mkdir('csv') rescue ['csv']
     start_date = Date.parse(@from_date)
     end_date = Date.parse(@to_date)
@@ -95,8 +95,8 @@ class Report
 
   # VALIDATE
   def selection_of_project_and_emp_code
-    if @project_id.blank? && @ecode.blank? && @manager_id.blank?
-      return self.errors.add(:base, "Please select either Ecode or Project Name Or Manager")
+    if @project_id.blank? && @ecode.blank? && @manager_id.blank? && @all.blank?
+      return self.errors.add(:base, "Please select either Ecode or Project Name Or Manager Or Select all")
     end
     if !@ecode.blank?
       @user = User.find_by_ecode(@ecode)
