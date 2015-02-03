@@ -10,12 +10,10 @@ class Admin::ReportsController < ApplicationController
       unless @report.valid?
         return render action: :loss_of_pays
       end
-      case params[:report_type].downcase
-        when 'lop'
+      case params[:report_type].to_sym
+        when :lop
           file = @report.generate_lop_report
-          send_file(file)
-        when 'lopRefund'
-          @report.print_lop_refunt
+          send_file(file)    
       end
       rescue => e
         log_error(e)
