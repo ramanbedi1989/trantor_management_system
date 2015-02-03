@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
   belongs_to :grade
   belongs_to :gender
   belongs_to :project
+  has_many :project_users
+  has_many :projects, :through => :project_users
   belongs_to :confirmation
   belongs_to :status
   belongs_to :location
@@ -35,4 +37,13 @@ class User < ActiveRecord::Base
   def role_enum
     ROLES
   end
+
+  def self.find_managers
+    where(role: 'manager')
+  end
+
+  def c_projects
+    projects.map(&:name).join(';')
+  end
+
 end

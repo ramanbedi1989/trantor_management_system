@@ -1,11 +1,22 @@
 Rails.application.routes.draw do
 
+  namespace :admin do
+    resources :reports do
+      collection do
+        get 'loss_of_pays'
+      end
+    end
+  end
+
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  
   devise_for :users
   
   devise_scope :user do
     root to: "devise/sessions#new"
   end
+
+
 
   get '/users/:id', to: 'users#show', as: "users_show"
   get '/users_info/:ecode', to: 'users#info', as: "users_info"
