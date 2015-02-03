@@ -3,6 +3,16 @@ module ApplicationHelper
     datetime.strftime("%d %b %Y")
   end
 
+
+  def from_select_box
+    create_select_options('16', 'from_date')
+  end
+
+  def to_select_box
+    create_select_options('15', 'to_date')
+  end
+
+
   def show_leaves(leave_info)
     total = Hash.new(0)
     leave_info.leave_credits.each do |lc|
@@ -23,4 +33,16 @@ module ApplicationHelper
       end.join.html_safe
     end
   end
+
+  private
+
+  def create_select_options(start_day, select_name)
+    options = []
+    today = Date.today
+    Date::MONTHNAMES[1..-1].each do |month|
+      options << ["#{ month }-#{ Date.today.year }", "#{ start_day }/#{ month }/#{ Date.today.year }"]
+    end  
+    (select_tag "#{ select_name }", options_for_select(options), {class: 'form-control', id: select_name}).html_safe
+  end
+
 end

@@ -6,4 +6,8 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(user)
     stored_location_for(user) || users_show_url(user)
   end
+
+  def log_error(exception)
+  	logger.error("[Exception] #{ exception.inspect }") and return
+  end
 end

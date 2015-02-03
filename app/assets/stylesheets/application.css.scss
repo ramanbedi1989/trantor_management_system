@@ -10,13 +10,16 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree .
+ *= require import_bootstrap
+ *= require scaffolds
  *= require calendar
  *= require bootstrap-datepicker3
  *= require dataTables/jquery.dataTables
  *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
  *= require_self
  */
+
+
 .cancel-leaves-content{
   font-size: 1.4em;
 }
@@ -68,4 +71,11 @@
 
 .sign_in_header{
   text-align: center;
+}
+.blue-button{
+  background-color: #3B67A7;
+  border-color: #1F3F6E;
+  color: white;
+  border-radius: 5px;
+  padding: 15px;
 }
