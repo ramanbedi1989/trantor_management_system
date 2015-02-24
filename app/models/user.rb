@@ -49,10 +49,13 @@ class User < ActiveRecord::Base
 
   # INCREMENT UPTO 36
   MAX_EARNED_LEAVES = 36
-  def increment_earned_leaves
+  def increment_earned_leaves(increment_by=1)
     earned_leaves = self.leave_credits.where("leave_id =?", Leave.earned_leave.id).count
     return false if earned_leaves == MAX_EARNED_LEAVES
-
+    left_leaves = MAX_EARNED_LEAVES - earned_leaves
+    if increment_by <= left_leaves
+      IncrementLeaves.increment_earned_leaves([self], increment_by)
+    end
   end
 
 end
