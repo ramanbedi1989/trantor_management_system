@@ -1,3 +1,4 @@
+require 'increment_leaves'
 class User < ActiveRecord::Base
   ALLOWED_LEAVES = ["CL/EL/CompOff", "Sick Leave", "Present But Card Not Shown", "On Office Duty/Client Side", "Maternity Leave", "Half Day Sick Leave"]
   ROLES = %w[employee manager admin]
@@ -44,6 +45,14 @@ class User < ActiveRecord::Base
 
   def c_projects
     projects.map(&:name).join(';')
+  end
+
+  # INCREMENT UPTO 36
+  MAX_EARNED_LEAVES = 36
+  def increment_earned_leaves
+    earned_leaves = self.leave_credits.where("leave_id =?", Leave.earned_leave.id).count
+    return false if earned_leaves == MAX_EARNED_LEAVES
+
   end
 
 end

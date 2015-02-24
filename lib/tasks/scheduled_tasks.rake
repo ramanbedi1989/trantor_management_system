@@ -14,7 +14,9 @@ namespace :scheduled_tasks do
   desc "Increment earned leaves"
   task increment_earned_leaves: :environment do 
     users = User.all
-    IncrementLeaves.increment_earned_leaves(users, 1)
+    users.each do |user|
+      user.increment_earned_leaves
+    end    
   end
 
   desc "Mail employees which are absent without pay"
