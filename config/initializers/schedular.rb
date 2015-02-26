@@ -25,5 +25,8 @@ end
 # THIS TASK WILL CARRY FORWARD CASUAL AND SICK LEAVES AT THE YEAR END
 # ON THE FIRST DAY OF EVERY YEAR AT 02 AM
 job = @scheduler.cron '00 02 01 01 *' do
-  print "do something at a given point in time"
+  puts "--> Executing the task"
+  require 'rake'
+  Rails.application.load_tasks
+  Rake::Task['scheduled_tasks:carry_forward_casual_leaves']
 end
