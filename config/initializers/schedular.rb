@@ -15,6 +15,7 @@ end
 
 
 # THIS JOB WILL BE EXECUTED EVERY LAST DAY OF THE MONTH
+# This job will increment earned leaves
 job = @scheduler.cron '50 23 L * *' do
 	puts "--> Executing the task"
 	require 'rake'
@@ -23,10 +24,41 @@ job = @scheduler.cron '50 23 L * *' do
 end
 
 # THIS TASK WILL CARRY FORWARD CASUAL AND SICK LEAVES AT THE YEAR END
-# ON THE FIRST DAY OF EVERY YEAR AT 02 AM
+# ON THE FIRST DAY OF EVERY YEAR AT 2:00 AM
 job = @scheduler.cron '00 02 01 01 *' do
   puts "--> Executing the task"
   require 'rake'
   Rails.application.load_tasks
   Rake::Task['scheduled_tasks:carry_forward_casual_leaves']
+end
+
+# THIS JOB WILL BE EXECUTED ON Jan 1
+# 2 Casual and 2 sick leave credit to all employees
+# 03:00 am
+job = @scheduler.cron '00 03 01 01 *' do
+  puts "--> Executing the task"
+  require 'rake'
+  Rails.application.load_tasks
+  Rake::Task['scheduled_tasks:increment_leaves']
+end
+
+# THIS JOB WILL BE EXECUTED ON Jan 1
+# 2 Casual and 2 sick leave credit to all employees
+# 03:00 am
+job = @scheduler.cron '00 03 01 04 *' do
+  puts "--> Executing the task"
+  require 'rake'
+  Rails.application.load_tasks
+  Rake::Task['scheduled_tasks:increment_leaves']
+end
+
+
+# THIS JOB WILL BE EXECUTED ON 1 July
+# 2 Casual and 2 sick leave credit to all employees
+# 03:00 am
+job = @scheduler.cron '00 03 01 07 *' do
+  puts "--> Executing the task"
+  require 'rake'
+  Rails.application.load_tasks
+  Rake::Task['scheduled_tasks:increment_leaves']
 end

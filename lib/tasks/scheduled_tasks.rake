@@ -32,6 +32,15 @@ namespace :scheduled_tasks do
     end    
   end
 
+  desc "Increment sick and casual leaves"
+  task increment_leaves: :environment do
+    users = User.all
+    users.each do |user|
+      user.increment_leaves
+    end
+  end
+
+
 end
 
 # rake attendance
