@@ -64,15 +64,15 @@ class User < ActiveRecord::Base
 #------------------------------------------------------------------------------------
 
   # 2 casual 2 sick
-  def increment_leaves
-    2.times do
+  def increment_leaves(n)
+    n.times do
       leave_credit = self.leave_credits.build(leave_id: Leave.sick_leave.id,
                                               leave_credited_date: Date.today,
                                               consumed: false
       )
       leave_credit.save
     end
-    2.times do
+    n.times do
       leave_credit = self.leave_credits.build(leave_id: Leave.casual_leave.id,
                                               leave_credited_date: Date.today,
                                               consumed: false

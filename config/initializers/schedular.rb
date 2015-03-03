@@ -49,7 +49,7 @@ job = @scheduler.cron '00 03 01 04 *' do
   puts "--> Executing the task"
   require 'rake'
   Rails.application.load_tasks
-  Rake::Task['scheduled_tasks:increment_leaves']
+  Rake::Task['scheduled_tasks:increment_leaves_2']
 end
 
 
@@ -60,5 +60,16 @@ job = @scheduler.cron '00 03 01 07 *' do
   puts "--> Executing the task"
   require 'rake'
   Rails.application.load_tasks
-  Rake::Task['scheduled_tasks:increment_leaves']
+  Rake::Task['scheduled_tasks:increment_leaves_2']
+end
+
+
+# THIS JOB WILL BE EXECUTED ON 1 Oct
+# 1 Casual and 1 sick leave credit to all employees
+# 03:00 am
+job = @scheduler.cron '00 03 01 07 *' do
+  puts "--> Executing the task"
+  require 'rake'
+  Rails.application.load_tasks
+  Rake::Task['scheduled_tasks:increment_leaves_1']
 end

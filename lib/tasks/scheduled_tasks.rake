@@ -33,10 +33,19 @@ namespace :scheduled_tasks do
   end
 
   desc "Increment sick and casual leaves"
-  task increment_leaves: :environment do
+  task increment_leaves_2: :environment do
     users = User.all
     users.each do |user|
-      user.increment_leaves
+      user.increment_leaves(2)
+    end
+  end
+
+
+  desc "Increment sick and casual leaves"
+  task increment_leaves_1: :environment do
+    users = User.all
+    users.each do |user|
+      user.increment_leaves(1)
     end
   end
 
