@@ -14,7 +14,9 @@ namespace :scheduled_tasks do
   desc "Increment earned leaves"
   task increment_earned_leaves: :environment do 
     users = User.all
-    IncrementLeaves.increment_earned_leaves(users, 1)
+    users.each do |user|
+      user.increment_earned_leaves
+    end    
   end
 
   desc "Mail employees which are absent without pay"
@@ -22,10 +24,32 @@ namespace :scheduled_tasks do
     #todo
   end
 
-  desc "Deduct loss of pay for employees that are absent without pay"
-  task increment_earned_leaves: :environment do 
-    #todo
+  desc "Carry forward leaves"
+  task carry_forward_casual_leaves: :environment do
+    users = User.all
+    users.each do |user|
+      user.carry_forward_casual_leaves
+    end    
   end
+
+  desc "Increment sick and casual leaves"
+  task increment_leaves_2: :environment do
+    users = User.all
+    users.each do |user|
+      user.increment_leaves(2)
+    end
+  end
+
+
+  desc "Increment sick and casual leaves"
+  task increment_leaves_1: :environment do
+    users = User.all
+    users.each do |user|
+      user.increment_leaves(1)
+    end
+  end
+
+
 end
 
 # rake attendance
