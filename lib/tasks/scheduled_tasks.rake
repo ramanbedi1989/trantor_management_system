@@ -68,7 +68,7 @@ namespace :scheduled_tasks do
       users = User.users_with_loss_of_pays(prev_month_date, today)
       managers = users.collect(&:manager).compact.uniq
       managers.each do |manager|
-        EmployeeEmails.loss_of_pay_reminder_manager(manager)
+        EmployeeEmails.loss_of_pay_reminder_manager(manager).deliver
       end
     end
   end

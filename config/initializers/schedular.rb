@@ -81,4 +81,16 @@ job = @scheduler.cron "30 23 15 * *" do
   puts "--> Executing the task"
   require 'rake'
   Rails.application.load_tasks
+  Rake::Task['scheduled_tasks:loss_of_pay_reminder']
+end
+
+
+
+# This job will be executed on 17th of every month.
+# This job will notify all manager whose employees have loss of pays
+job = @scheduler.cron "30 23 17 * *" do
+  puts "--> Executing the task"
+  require 'rake'
+  Rails.application.load_tasks
+  Rake::Task['scheduled_tasks:loss_of_pay_reminder_manager']
 end
