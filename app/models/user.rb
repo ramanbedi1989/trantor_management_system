@@ -146,5 +146,11 @@ class User < ActiveRecord::Base
     end
   end
 
+ def self.users_with_loss_of_pays(from, to)
+  return LossOfPayInfo.joins(:attendance => :user)
+  .where("Date(loss_of_pay_infos.created_at) >= ? AND Date(loss_of_pay_infos.created_at) <= ?", from, to)
+  .collect(&:user)
+ end 
+
 
 end
