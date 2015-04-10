@@ -53,7 +53,7 @@ namespace :scheduled_tasks do
     task earned_leaves_reminder: :environment do
      users = User.all
       users.each do |user|
-        if user.earned_leaves == 33
+        if user.earned_leaves.count == 33
           EmployeeEmails.earned_leave_reminder(user).deliver
         end
       end 
