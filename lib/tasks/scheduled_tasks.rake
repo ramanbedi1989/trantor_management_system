@@ -49,6 +49,18 @@ namespace :scheduled_tasks do
     end
   end
 
+  desc "send email to those whose earned leaves count is equal to 33" do
+    task earned_leaves_reminder: :environment do
+     users = User.all
+      users.each do |user|
+        if user.earned_leaves.count == 33
+          EmployeeEmails.earned_leave_reminder(user).deliver
+        end
+      end 
+    end
+  end
+
+
 
   desc "Mail to users about loss of pays" do
     task loss_of_pay_reminder: :environment do

@@ -16,7 +16,7 @@ end
 
 # THIS JOB WILL BE EXECUTED EVERY LAST DAY OF THE MONTH
 # This job will increment earned leaves
-job = @scheduler.cron '50 23 L * *' do
+job = @scheduler.cron '30 23 L * *' do
 	puts "--> Executing the task"
 	require 'rake'
 	Rails.application.load_tasks
@@ -42,7 +42,7 @@ job = @scheduler.cron '00 03 01 01 *' do
   Rake::Task['scheduled_tasks:increment_leaves']
 end
 
-# THIS JOB WILL BE EXECUTED ON Jan 1
+# THIS JOB WILL BE EXECUTED ON April 1
 # 2 Casual and 2 sick leave credit to all employees
 # 03:00 am
 job = @scheduler.cron '00 03 01 04 *' do
@@ -53,7 +53,7 @@ job = @scheduler.cron '00 03 01 04 *' do
 end
 
 
-# THIS JOB WILL BE EXECUTED ON 1 July
+# THIS JOB WILL BE EXECUTED ON July 1
 # 2 Casual and 2 sick leave credit to all employees
 # 03:00 am
 job = @scheduler.cron '00 03 01 07 *' do
@@ -67,13 +67,12 @@ end
 # THIS JOB WILL BE EXECUTED ON 1 Oct
 # 1 Casual and 1 sick leave credit to all employees
 # 03:00 am
-job = @scheduler.cron '00 03 01 07 *' do
+job = @scheduler.cron '00 03 01 10 *' do
   puts "--> Executing the task"
   require 'rake'
   Rails.application.load_tasks
   Rake::Task['scheduled_tasks:increment_leaves_1']
 end
-
 
 # This job will be executed on 15th of every month.
 # This job will notify all users who have loss of pays in the last month
@@ -93,4 +92,14 @@ job = @scheduler.cron "30 23 17 * *" do
   require 'rake'
   Rails.application.load_tasks
   Rake::Task['scheduled_tasks:loss_of_pay_reminder_manager']
+end
+
+# This job will be executed on the last day of every month
+# to notify those users who have earned leaves equal to 33
+# 23:45 pm on the last day of every month
+job = @scheduler.cron '45 23 L * *' do
+  puts "--> Executing the task"
+  require 'rake'
+  Rails.application.load_tasks
+  Rake::Task["scheduled_tasks:earned_leaves_reminder"].invoke  
 end

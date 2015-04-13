@@ -20,4 +20,10 @@ class EmployeeEmails < ActionMailer::Base
   	mail(:to => "#{@manager.name} <#{@manager.email}>", :subject => @subject)
   end
 
+  def earned_leave_reminder(user)
+  	@user = user
+  	@subject = 'LMS: Maximum Earned Leave Balance Limit'
+    mail(:to => "#{user.name} <#{user.email}>", :subject => @subject)
+  end
+
 end
