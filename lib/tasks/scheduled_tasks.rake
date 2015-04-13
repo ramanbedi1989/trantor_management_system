@@ -50,6 +50,29 @@ namespace :scheduled_tasks do
   end
 
 
+  desc "Mail to users about loss of pays" do
+    task loss_of_pay_reminder: :environment do
+      prev_month_date = (Date.today-1.month)+1.day
+      today = Date.today
+      users = User.users_with_loss_of_pays(prev_month_date, today)
+      users.each do |user|
+        EmployeeEmails.loss_of_pay_reminder(user).deliver
+      end  
+    end
+  end
+
+  desc "Mail to managers about loss of pay" 
+  task loss_of_pay_reminder_manager: :environment do
+      prev_month_date = (Date.today-1.month)+1.day
+      today = Date.today
+      users = User.users_with_loss_of_pays(prev_month_date, today)
+      managers = users.collect(&:manager).compact.uniq
+      managers.each do |manager|
+        EmployeeEmails.loss_of_pay_reminder_manager(manager).deliver
+      end
+    end
+  end
+
 end
 
 # rake attendance
