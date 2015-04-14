@@ -291,6 +291,7 @@ class UsersController < ApplicationController
           return;
         end
       end
+      EmployeeEmails.approval_leave_request_email_to_manager(user, leave, @leave_info)                  ##Mail to manager for approval
       if check_status
         render json: leaves_deducted
       else
