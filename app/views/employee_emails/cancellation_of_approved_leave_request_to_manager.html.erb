@@ -1,10 +1,10 @@
 <p>
-Dear <%@manager.name%>,
+Dear <%=@manager.name%>,
 </p>
 
 <p>
   <%=render :partial => 'empl_leave_info', locals: {user: @user, leave_info: @leave_info}%>
-  Go to <Link> to approve this leave <br/>
+  Go to <Link> to cancel the approved leave <br/>
 
 <p>
     Regards <br/>

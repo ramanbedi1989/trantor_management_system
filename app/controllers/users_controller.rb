@@ -325,6 +325,7 @@ class UsersController < ApplicationController
         leave_info.cancelled = true
         message = "Your leaves have been canceled sucessfully."
       else
+        EmployeeEmails.cancellation_of_approved_leave_request_to_manager(user, nil, leave_info)
         leave_info.cancel_request = true
         message = "Your leaves have been requested for cancellation."
       end
