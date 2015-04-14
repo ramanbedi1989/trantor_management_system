@@ -1,0 +1,20 @@
+Dear <%=@manager.name%>,<br/>
+Please approve leave application with details as below – <br/>
+
+<p>
+    Ecode: <%=@user.ecode%><br/>
+    Name:  <%=@user.name%><br/>
+    Leave Type: <%=@leave.name%><br/>
+    From Date:  <%=@leave_info.date_from%><%%><br/>
+    To Date     <%=@leave_info.date_to%><br/>
+    Description <%=@leave_info.reason%><br/>
+    Go to <Link> to approve this leave <br/>
+</p>
+
+<br/>
+
+<p>
+    Regards <br/>
+    HR Team <br/>
+    This is an automated mail. Please DO NOT REPLY. Please put a ticket on HR HelpDesk (Intrantet\hr) in case any queries/issues.
+</p>
