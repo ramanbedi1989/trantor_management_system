@@ -3,8 +3,8 @@ Dear <%=@manager.name%>,
 </p>
 
 <p>
-  <%=render :partial => 'empl_leave_info', locals: {user: @user, leave_info: @leave_info}%>
-  Go to <Link> to cancel the approved leave <br/>
+  <%=render :partial => 'empl_leave_info', locals: {user: @user, leave_info: @leave_info, leave_type: @leave_type}%>
+  Go to <%=link_to "Link", '#'%> to cancel the approved leave <br/>
 
 <p>
     Regards <br/>

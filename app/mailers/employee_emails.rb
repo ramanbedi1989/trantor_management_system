@@ -27,18 +27,20 @@ class EmployeeEmails < ActionMailer::Base
   end
 
 
-  def approval_leave_request_email_to_manager(user, leave, leave_info)
+  def approval_leave_request_email_to_manager(user, leave_info)
     @user = user
     @manager = user.manager
     @leave_info = leave_info
+    @leave_type = leave_info.leave_credits.collect(&:name).to_sentence
     @subject = "LMS : Leave Approval Required"
     mail(:to => "#{@manager.name} <#{@manager.email}>", :subject => @subject)
   end
 
-  def cancellation_of_approved_leave_request_to_manager(user, leave, leave_info)
+  def cancellation_of_approved_leave_request_to_manager(user, leave_info)
     @user = user
     @manager = user.manager
     @leave_info = leave_info
+    @leave_type = leave_info.leave_credits.collect(&:name).to_sentence
     @subject = "LMS : Leave Cancellation Approval Required"
     mail(:to => "#{@manager.name} <#{@manager.email}>", :subject => @subject)
   end
