@@ -1,0 +1,15 @@
+Dear <%=@manager.name%>,<br/>
+Please approve leave application with details as below – <br/>
+
+<p>
+    <%=render :partial => 'empl_leave_info', locals: {user: @user, leave_info: @leave_info, leave_type: @leave_type}%>
+    Go to <%=link_to "Link", '#'%> to approve this leave <br/>
+</p>
+
+<br/>
+
+<p>
+    Regards <br/>
+    HR Team <br/>
+    This is an automated mail. Please DO NOT REPLY. Please put a ticket on HR HelpDesk (Intrantet\hr) in case any queries/issues.
+</p>
