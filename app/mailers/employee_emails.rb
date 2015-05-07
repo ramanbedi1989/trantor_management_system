@@ -1,5 +1,5 @@
 class EmployeeEmails < ActionMailer::Base
-  default from: "Team HR"
+  default from: "DoNotReply_HROps@chd.trantorinc.com"
   add_template_helper(ApplicationHelper)
 
   def leave_applied(user, leave)
@@ -11,7 +11,7 @@ class EmployeeEmails < ActionMailer::Base
   def loss_of_pay_reminder(user)
   	@user = user
   	@subject = "LMS : Loss of Pay Report"
-  	mail(:to => "#{@user.name} <#{@user.email}>", :subject => @subject)
+  	mail(:to => "#{@user.name} <#{@user.Pemail}>", :subject => @subject)
   end
 
   def loss_of_pay_reminder_manager(manager)

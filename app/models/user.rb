@@ -82,6 +82,28 @@ class User < ActiveRecord::Base
     self.leave_credits
   end
 
+
+  def increment_casual_leaves(n)
+     n.times do
+      leave_credit = self.leave_credits.build(leave_id: Leave.casual_leave.id,
+                                                leave_credited_date: Date.today,
+                                                consumed: false
+        )
+      leave_credit.save
+    end
+  end
+
+  def increment_sick_leaves(n)
+    n.times do
+      leave_credit = self.leave_credits.build(leave_id: Leave.sick_leave.id,
+                                                leave_credited_date: Date.today,
+                                                consumed: false
+        )
+      leave_credit.save
+    end
+  end
+
+
   # INCREMENT UPTO 36
   MAX_EARNED_LEAVES = 36
   def increment_earned_leaves(increment_by=1)
@@ -90,6 +112,8 @@ class User < ActiveRecord::Base
     left_leaves = MAX_EARNED_LEAVES - earned_leaves
     if increment_by <= left_leaves
       IncrementLeaves.increment_earned_leaves([self], increment_by)
+    else
+      return false
     end
   end
 
