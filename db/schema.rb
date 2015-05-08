@@ -211,6 +211,6 @@ ActiveRecord::Schema.define(version: 20150122082912) do
     t.string   "role"
   end
 
-  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", unique: true
 
 end

@@ -55,3 +55,4 @@ gem 'rufus-scheduler'
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+gem 'thin'

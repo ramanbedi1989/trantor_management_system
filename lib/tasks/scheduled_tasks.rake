@@ -85,7 +85,6 @@ namespace :scheduled_tasks do
     end
   end
 
-end
 
 # rake attendance
 task :attendance do
