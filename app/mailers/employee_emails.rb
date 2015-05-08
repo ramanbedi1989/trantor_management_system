@@ -1,5 +1,5 @@
 class EmployeeEmails < ActionMailer::Base
-  default from: "DoNotReply_HROps@chd.trantorinc.com"
+  default from: "Team HR"
   add_template_helper(ApplicationHelper)
 
   def leave_applied(user, leave)
