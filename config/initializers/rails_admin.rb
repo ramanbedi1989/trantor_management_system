@@ -37,7 +37,8 @@ RailsAdmin.config do |config|
 
   config.navigation_static_links = {
     'Loss Of Pay Data' => '/admin/reports/loss_of_pays',
-    'Assign leaves to employees' => "/admin/leaves/"
+    'Assign leaves to employees' => "/admin/leaves/",
+    'Import Users' => "/admin/users/import"
   }
   #config.navigation_static_label = "Reports"
 end

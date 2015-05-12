@@ -3,12 +3,18 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :reports do
       collection do
-        get 'loss_of_pays'
-      end
+        match 'loss_of_pays', :via => [:get, :post]
+      end      
     end
 
     resources :leaves do
     end
+
+    resources :users do
+        collection do
+          match 'import', :via => [:get, :post]
+        end
+      end
     
   end
 

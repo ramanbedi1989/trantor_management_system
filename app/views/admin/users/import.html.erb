@@ -1,0 +1,15 @@
+<div class="row">
+	<div class="col-sm-12">
+		<h3>Import Users</h3>
+		<div class='col-sm-10'>
+			<%=form_tag import_admin_users_path , {role: 'role', 'multipart' => true} do %>		
+			 <div class='col-sm-12 form-group'>		
+				<%=file_field_tag "file", :class => "form-control"%>
+			 </div>	
+			 <div class='col-sm-12 form-group'>		
+				<%=submit_tag "Submit"%>
+			 </div>
+			<% end %>
+		</div>
+	</div>
+</div>
