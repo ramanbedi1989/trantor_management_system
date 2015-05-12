@@ -6,6 +6,10 @@ Rails.application.routes.draw do
         get 'loss_of_pays'
       end
     end
+
+    resources :leaves do
+    end
+    
   end
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'

@@ -1,0 +1,42 @@
+<div class="row">
+	<div class="col-sm-12">
+		<h2>Assign leaves to employees</h2>
+		<%=form_tag "/admin/leaves" do  %>
+		  <div class='col-sm-3'>
+			<%=select_tag "la[user]", options_for_select(User.all.collect{|u| [ u.username, u.id ]}), :prompt => "--Select Employee--"%>
+		  </div>
+		  <div class='col-sm-3'>
+		  	<%=select_tag "la[leave_type]", 
+		  	   options_for_select([["Earned Leaves", 'increment_earned_leaves'], 
+		  		 	["Casual Leaves", 'increment_casual_leaves'], 
+		  		 	["Sick Leaves", 'increment_sick_leaves']]), 
+		  		:prompt => "--Select Type--"
+		  	%>
+		  </div>
+		  <div class='col-sm-3'>
+		  	<%=text_field_tag "la[number]", 'number', :id => 'number'%>
+		  </div>
+		  <div class='col-sm-3'>
+		  	<%=submit_tag "Submit"%>
+		  </div>
+		<% end %>
+	</div>
+</div>
+
+<script type="text/javascript">
+	jQuery(function($){
+		$("#number").css('color', 'grey');
+
+		$("#number").on("focus", function(){
+			$(this).css('color', 'black');
+			$(this).val('');
+		});
+		
+		$("#number").on("blur", function(){
+			$(this).css('color', 'grey');
+			if($(this).val().length == 0){
+				$(this).val("number");
+			}
+		});
+	});
+</script>
