@@ -197,8 +197,9 @@ class User < ActiveRecord::Base
    user.pan               = record[11]
    user.card_no           = record[12]
    designation            = Designation.where("name=?", record[13]).first
-   user.designation       = designation.try(:id)
-   user.grade             = record[14]
+   user.designation_id       = designation.try(:id)
+   grade = Grade.where("name = ?", record[14]).first
+   user.grade_id             = grade.try(:id)
    manager                = User.where("username = ?", record[15]).first
    user.manager_id        = manager.try(:id)
    confirmation           = Confirmation.where("name = ?", record[16]).first
@@ -209,19 +210,43 @@ class User < ActiveRecord::Base
    user.marital_status_id = marital_status.try(:id)
    lta_option             = LtaOption.where("name = ?", record[19]).first
    user.lta_option_id = lta_option.try(:id)
+   user.role = "admin"
+   user.save!
    projects = record[20].split(",")
    projects.each do |p|
-    ProjectUser.create({user_id: self.id, project_id: p.id})
+    project = Project.where("name = ?", p).first
+    ProjectUser.create({user_id: user.id, project_id: project.id}) if project
    end
    earned_leaves_no = record[21]
    earned_leaves_created = []
-   earned_leaves_no.times do |i|
-    earned_leaves_created << LeaveCredit.new(user_id: self.id, 
-                                             leave_id: Leave.casual_leave.id,
+   earned_leaves_no.to_i.times do |i|
+    earned_leaves_created << LeaveCredit.new(user_id: user.id, 
+                                             leave_id: Leave.earned_leave.id,
                                              leave_credited_date: Date.today,
                                              consumed: false)
    end
    LeaveCredit.import(earned_leaves_created)
+   
+   casual_leaves_no = record[22]
+   casual_leaves_created = []
+   casual_leaves_no.to_i.times do |i|
+    casual_leaves_created << LeaveCredit.new(user_id: user.id, 
+                                             leave_id: Leave.casual_leave.id,
+                                             leave_credited_date: Date.today,
+                                             consumed: false)
+   end
+   LeaveCredit.import(casual_leaves_created)
+
+   sick_leaves_no = record[23]
+   sick_leaves_created = []
+   sick_leaves_no.to_i.times do |i|
+    sick_leaves_created << LeaveCredit.new(user_id: user.id, 
+                                             leave_id: Leave.sick_leave.id,
+                                             leave_credited_date: Date.today,
+                                             consumed: false)
+   end
+   LeaveCredit.import(sick_leaves_created)
+
   end
 
 
