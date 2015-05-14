@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   belongs_to :grade
   belongs_to :gender
   belongs_to :project
-  has_many :project_users
+  has_many :project_users, :dependent => :destroy
   has_many :projects, :through => :project_users
   belongs_to :confirmation
   belongs_to :status
@@ -19,9 +19,9 @@ class User < ActiveRecord::Base
   belongs_to :lta_option
   belongs_to :med_reimb_option
   belongs_to :manager, class_name: "User", foreign_key: :manager_id
-  has_many :leave_credits
+  has_many :leave_credits, :dependent => :destroy
   has_many :attendances
-  has_many :leave_infos
+  has_many :leave_infos, :dependent => :destroy
 
   def manager?
     if User.find_by_manager_id(self.id)

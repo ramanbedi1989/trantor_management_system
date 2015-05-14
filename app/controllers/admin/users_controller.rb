@@ -8,7 +8,7 @@ class Admin::UsersController < ApplicationController
 		 lines[1..-1].each do |line|		 	
 		 	User.import_user(line)
 		 end
-	    
+		 flash.now[:notice] = "Users imported successfully"	    
 	  end
 	end
 
