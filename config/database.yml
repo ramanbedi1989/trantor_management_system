@@ -19,9 +19,15 @@ default: &default
 #   password: root
 #   database: tms_development
 
-development:
-  <<: *default
-  database: db/development.sqlite3
+development:  
+  adapter: mysql2
+  host: localhost
+  port: 3306
+  timeout: 5000
+  pool: 25
+  username: root
+  password: root
+  database: tms_development
 
 attendance:
   adapter: mysql2
