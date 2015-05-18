@@ -43,6 +43,7 @@ gem 'cancan'
 gem 'jquery-datatables-rails', '~> 2.2.3'
 gem 'whenever', :require => false
 gem 'rufus-scheduler'
+gem 'activerecord-import', '>= 0.4.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
