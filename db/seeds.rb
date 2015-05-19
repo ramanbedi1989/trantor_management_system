@@ -42,10 +42,30 @@ SeedData["genders"].each do |gender|
   Gender.create(name: gender)
 end
 
-Project.create(name: "BDG")
-u = User.create(username: "raman.bedi", name: "Raman Bedi", card_no: "16609047", day_shift: true, role: "admin", gender_id: 1, ecode: "e00031", email: "raman.bedi@trantorinc.com")
-User.create(username: "navpreet.singh", name: "Navpreet Singh", card_no: "6212341", day_shift: true, role: "employee", manager_id: u.id, gender_id: 1, ecode: "e00156", email: "navpreet.singh@trantorinc.com")
-User.create(username: "psahni", name: "Prashant Sahni", card_no: "13240641", day_shift: true, role: "employee", manager_id: u.id, gender_id: 1, ecode: "e00139", email: "prashant.sahni@trantorinc.com")
 
-User.create(username: 'nidhi.ayri', name: 'Nidhi Ayri', card_no: '06205802', day_shift: true, role: "employee", manager_id: u.id, gender_id: 2, ecode: "E00015", email: "nidhi.ayri@trantorinc.com")
+%w{
+  HR
+  BDG
+  ISO
+  FINANCE
+  HR
+  CAN
+  CAN
+  MARKETLIVE
+  Finance
+  MARKETLIVE
+  IT
+  Google
+}.each do |p_name|
+  Project.create(name: p_name)
+end
+#u = User.create(username: "raman.bedi", name: "Raman Bedi", card_no: "16609047", day_shift: true, role: "admin", gender_id: 1, ecode: "e00031", email: "raman.bedi@trantorinc.com")
+#User.create(username: "navpreet.singh", name: "Navpreet Singh", card_no: "6212341", day_shift: true, role: "employee", manager_id: u.id, gender_id: 1, ecode: "e00156", email: "navpreet.singh@trantorinc.com")
+#User.create(username: "psahni", name: "Prashant Sahni", card_no: "13240641", day_shift: true, role: "employee", manager_id: u.id, gender_id: 1, ecode: "e00139", email: "prashant.sahni@trantorinc.com")
+
+#User.create(username: 'nidhi.ayri', name: 'Nidhi Ayri', card_no: '06205802', day_shift: true, role: "employee", manager_id: u.id, gender_id: 2, ecode: "E00015", email: "nidhi.ayri@trantorinc.com")
 Holiday.create(name: "Independence Day", date: "15/08/2014".to_date, day_shift: true)
+
+
+#Holiday.create(name: "Independence Day", date: "15/08/2014".to_date, day_shift: true)
+

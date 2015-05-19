@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150122082912) do
+ActiveRecord::Schema.define(version: 20150519065212) do
 
   create_table "attendances", force: true do |t|
     t.integer  "user_id"
@@ -194,7 +194,7 @@ ActiveRecord::Schema.define(version: 20150122082912) do
     t.string   "ifsc"
     t.string   "bank_address"
     t.integer  "lta_option_id"
-    t.integer  "med_reimb_option_id"
+    t.string   "contractual_ecode"
     t.string   "pf_no"
     t.string   "esi_no"
     t.integer  "card_no"
