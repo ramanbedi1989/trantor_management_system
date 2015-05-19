@@ -181,7 +181,7 @@ class User < ActiveRecord::Base
 
   def self.import_user(comma_separated_values)
    require 'activerecord-import'
-   record = comma_separated_values.split(",")
+   record = comma_separated_values.split(",") 
    user = User.new
    user.username = record[0]
    user.ecode    = record[1]
@@ -191,7 +191,7 @@ class User < ActiveRecord::Base
    user.email = record[5]
    user.current_contact      = record[6]
    user.emergency_contact_no = record[7]
-   user.date_of_birth        = record[8]
+   user.date_of_birth        =  Date.strptime(record[8], "%m/%d/%Y")
    user.blood_group          = record[9]
    user.marriage_anniv_date  = record[10]
    user.pan               = record[11]
@@ -200,7 +200,7 @@ class User < ActiveRecord::Base
    user.designation_id       = designation.try(:id)
    grade = Grade.where("name = ?", record[14]).first
    user.grade_id             = grade.try(:id)
-   manager                = User.where("username = ?", record[15]).first
+   manager                = User.where("ecode = ?", record[15]).first
    user.manager_id        = manager.try(:id)
    confirmation           = Confirmation.where("name = ?", record[16]).first
    user.confirmation_id   = confirmation.try(:id)
@@ -210,14 +210,20 @@ class User < ActiveRecord::Base
    user.marital_status_id = marital_status.try(:id)
    lta_option             = LtaOption.where("name = ?", record[19]).first
    user.lta_option_id = lta_option.try(:id)
-   user.role = "admin"
-   user.save!
    projects = record[20].split(",")
+   user.role = record[21].downcase
+   employee_type = EmpType.where("name = ?", record[22]).first
+   user.emp_type_id = employee_type.try(:id)
+   user.contractual_ecode = record[23]
+   user.prior_exp = record[27].to_s
+   user_status = Status.where("name = ?", record[28].chomp).first
+   user.status_id = user_status.try(:id)
+   user.save!   
    projects.each do |p|
     project = Project.where("name = ?", p).first
     ProjectUser.create({user_id: user.id, project_id: project.id}) if project
    end
-   earned_leaves_no = record[21]
+   earned_leaves_no = record[24]
    earned_leaves_created = []
    earned_leaves_no.to_i.times do |i|
     earned_leaves_created << LeaveCredit.new(user_id: user.id, 
@@ -227,7 +233,7 @@ class User < ActiveRecord::Base
    end
    LeaveCredit.import(earned_leaves_created)
    
-   casual_leaves_no = record[22]
+   casual_leaves_no = record[25]
    casual_leaves_created = []
    casual_leaves_no.to_i.times do |i|
     casual_leaves_created << LeaveCredit.new(user_id: user.id, 
@@ -237,7 +243,7 @@ class User < ActiveRecord::Base
    end
    LeaveCredit.import(casual_leaves_created)
 
-   sick_leaves_no = record[23]
+   sick_leaves_no = record[26]
    sick_leaves_created = []
    sick_leaves_no.to_i.times do |i|
     sick_leaves_created << LeaveCredit.new(user_id: user.id, 
@@ -246,7 +252,6 @@ class User < ActiveRecord::Base
                                              consumed: false)
    end
    LeaveCredit.import(sick_leaves_created)
-
   end
 
 
