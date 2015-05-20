@@ -224,7 +224,7 @@ class User < ActiveRecord::Base
    user.emp_type_id = employee_type.try(:id)
    user.contractual_ecode = record[23]
    user.prior_exp = record[27].to_s
-   user_status = Status.where("name = ?", record[28].chomp).first
+   user_status = Status.where("name = ?", record[30].chomp).first
    user.status_id = user_status.try(:id)
    user.save!   
    projects.each do |p|
