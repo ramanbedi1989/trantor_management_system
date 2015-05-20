@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     resources :users do
         collection do
           match 'import', :via => [:get, :post]
+          match 'export', :via => [:get, :post]
         end
       end
     

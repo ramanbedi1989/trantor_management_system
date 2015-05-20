@@ -23,6 +23,14 @@ class User < ActiveRecord::Base
   has_many :attendances
   has_many :leave_infos, :dependent => :destroy
 
+
+  EXPORT_FIELDS = %w{
+    username ecode name date_of_joining bu email current_contact emergency_contact_no date_of_birth blood_group 
+    marriage_anniv_date pan card_no designation grade manager_ecode confirmation gender marital_status lta_option 
+    projects Role Emp_type Contractual_Ecode earned_leaves_no casual_leaves_no sick_leaves_no Prior-Exp Trantor-Exp Total-Exp 
+    Status
+  }
+
   def manager?
     if User.find_by_manager_id(self.id)
       true
@@ -254,5 +262,37 @@ class User < ActiveRecord::Base
    LeaveCredit.import(sick_leaves_created)
   end
 
+
+  def calculate_trantor_exp
+     val = ((Date.today-self.date_of_joining.to_date).to_i)/365.to_f
+     val.round(1)
+  end
+
+  def calculate_total_exp
+    (calculate_trantor_exp + prior_exp.to_f).round(1)
+  end
+
+  def self.export_all
+    filename = "#{ Rails.root }/users.csv"
+    File.open("users.csv", 'w') do |file|
+      file.write("#{EXPORT_FIELDS.join(",")}")
+      file.write("\n")
+      User.all.each do |user|
+        fields = [
+          user.username, user.ecode, user.name, user.date_of_joining.strftime("%D"), user.bu, user.email, user.current_contact,
+          user.emergency_contact_no, user.date_of_birth.strftime("%D"), user.blood_group, (user.marriage_anniv_date ? user.marriage_anniv_date.strftime("%D") : '' ),
+          user.pan,  user.card_no, user.designation.try(:name), user.grade.try(:name), (user.manager ? user.manager.ecode : '' ),
+          user.confirmation.try(:name), user.gender.try(:name), user.marital_status.try(:name), user.lta_option.try(:name),
+          user.projects.join(","), user.role, user.emp_type.try(:name), user.contractual_ecode, user.earned_leaves.count,
+          user.casual_leaves.count, user.sick_leaves.count, user.prior_exp.to_f, user.calculate_trantor_exp, user.calculate_total_exp,
+          user.status.try(:name)
+        ]
+        fields = fields.join(",")
+        file.write(fields)
+        file.write("\n")
+      end
+    end
+    return filename
+  end
 
 end

@@ -12,4 +12,13 @@ class Admin::UsersController < ApplicationController
 	  end
 	end
 
+	def export
+		if request.post?
+			file = User.export_all
+			send_file(file)    
+		else
+			@users = User.all
+		end
+		
+	end
 end
