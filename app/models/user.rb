@@ -189,8 +189,11 @@ class User < ActiveRecord::Base
 
   def self.import_user(comma_separated_values)
    require 'activerecord-import'
-   record = comma_separated_values.split(",") 
-   user = User.new
+   record = comma_separated_values.split(",")
+   user = User.where("username = ? OR ecode = ?", record[0], record[1]).first
+   unless user
+    user = User.new
+   end   
    user.username = record[0]
    user.ecode    = record[1]
    user.name     = record[2]
