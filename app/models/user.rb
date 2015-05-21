@@ -181,12 +181,12 @@ class User < ActiveRecord::Base
 
   def self.import_user(comma_separated_values)
    require 'activerecord-import'
-   record = comma_separated_values.split(",") 
+   record = comma_separated_values.split(",") 	
    user = User.new
    user.username = record[0]
    user.ecode    = record[1]
    user.name     = record[2]
-   user.date_of_joining = record[3]
+   user.date_of_joining = Date.strptime(record[3], "%m/%d/%Y")
    user.bu    = record[4]
    user.email = record[5]
    user.current_contact      = record[6]
