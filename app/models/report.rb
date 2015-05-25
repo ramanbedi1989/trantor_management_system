@@ -37,9 +37,35 @@ class Report
       @loss_of_pays = LossOfPayInfo.joins(:attendance => :user).where("user_id IN (?)", users_ids)
       .where("DATE(attendances.attendance_date) >= ? AND DATE(attendances.attendance_date) <= ? ", Date.parse(@from_date), Date.parse(@to_date))
     end
-    generate_csv(lop_dates_by_user_id)
+    generate_lop_csv(lop_dates_by_user_id)
   end
 
+  def generate_attendance_report
+    if !@ecode.blank?
+       @user = User.find_by_ecode(@ecode)
+      @attendances = Attendance.joins(:user).where("user_id = ?", @user.id)
+    elsif  !@project.blank?
+      users_ids = @project.users.collect(&:id)
+      @attendances = Attendance.joins(:user).where("user_id IN (?)", users_ids).includes(:user)
+    elsif !@manager_id.blank?
+      users_ids = User.where(manager_id: @manager_id).collect(&:id)
+      @attendances = Attendance.joins(:user).where("user_id IN (?)", users_ids).includes(:user)
+    elsif @all
+      @attendances = Attendance.joins(:user).includes(:user)
+    end    
+    generate_attendance_csv(collect_attendance_data)
+  end
+
+ 
+  def collect_attendance_data        
+     return {}  if @attendances.blank?
+     attendance_info = {}
+     @attendances.each do |attendance|
+        attendance_info[attendance.user]||=Hash.new
+        attendance_info[attendance.user].merge!({attendance.attendance_date.day => attendance.present? ? 'P' : attendance.leave_or_absent_or_weekend})
+     end
+     attendance_info
+  end
 
   def lop_dates_by_user_id()
     return {}  if @loss_of_pays.blank?
@@ -51,7 +77,8 @@ class Report
     lop_infos
   end
 
-  def generate_csv(data = {})
+#------------------------------------------------------------------------------------------------------------
+  def generate_lop_csv(data = {})
     raise "No data exists" if data.blank?
     FileUtils.mkdir('csv') rescue ['csv']
     start_date = Date.parse(@from_date)
@@ -80,6 +107,39 @@ class Report
       end
     end
     return filename
+  end
+
+#------------------------------------------------------------------------------------------------------------
+
+  def generate_attendance_csv(data={})
+      raise "No data exists" if data.blank?
+      start_date = Date.parse(@from_date)
+      end_date = Date.parse(@to_date)
+      filename = "#{Rails.root}/attendance.csv"
+      File.open(filename, 'w') do |file|
+        ## HEADER ##
+        file.write("")
+        start_date.step(end_date).each do |date|
+          file.write(",")
+          file.write(date.strftime("%d-%m-%Y"))
+        end
+        file.write("\n")
+       data.each_pair do |user, att_hash| 
+         file.write("#{ user.ecode } - #{user.username }")
+         start_date.step(end_date).each do |date|
+         day = date.day       
+          if !(att_hash.keys & [day]).blank?
+            file.write("," + att_hash[day].to_s)
+          elsif (date.strftime("%a").downcase.match(/sun/) ||  date.strftime("%a").downcase.match(/sat/))
+            file.write("," + "W")
+          else
+            file.write("," + "NA")
+          end
+         end       
+        file.write("\n")
+      end
+     end
+   return filename
   end
 
 

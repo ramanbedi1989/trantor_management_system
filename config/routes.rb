@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :reports do
       collection do
         match 'loss_of_pays', :via => [:get, :post]
+        match 'attendance', :via => [:get, :post]
       end      
     end
 

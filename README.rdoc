@@ -1,28 +1,9 @@
-== README
+== START SERVER WITH MONITORING ON WITH GOD
+god -c config/unicorn.god -D
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+== STOP SERVER
+kill -9  $(cat tmp/pids/unicorn.pid)
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+Note: If the server does not starts then start the server normally
+unicorn -p8888 and execute the first command (monitoring)

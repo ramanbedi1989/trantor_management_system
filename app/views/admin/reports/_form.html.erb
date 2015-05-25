@@ -1,12 +1,5 @@
-<div class="row">
-	<div class="col-sm-12">
-    <%=link_to "< Back to Report Page", admin_reports_path%>
-		<h1>Loss of Pay Reports</h1>
-	</div>
-
-    <form role="form" action="<%=admin_reports_path(report_type: 'lop')%>" method="POST">
-        <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-        <div class='col-sm-12'>
+<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+	 	<div class='col-sm-12'>
           <div class="form-group col-md-12">
             Employee Code:
             <input type="text" class="form-control" name="ecode" value="<%=params[:ecode] %>"/>
@@ -27,7 +20,8 @@
             Select Manager
             <%=select_tag "manager_id", options_for_select(User.find_managers.map{|m| [m.name, m.id]}), :prompt => '--Select--', class: 'form-control'%>  
           </div>
-          <div class="form-group">
+      
+         <div class="form-group">
             OR
           </div>
           <div class="form-group col-sm-12">
@@ -38,23 +32,21 @@
              <input class="form-control" type="text" name='from_date' id="from_date" placeholder="DD/MM/YY" value="<%=params[:from_date]%>">
             <span class="error help-block"><%=@report.errors[:from_date].join(",") if @report && @report.errors[:from_date]%></span>
           </div>
-        <div class="form-group col-md-6">
-          To(Date)
-          <input class="form-control" type="text" name='to_date' id="to_date" placeholder="DD/MM/YY" value="<%=params[:to_date]%>">
-          <span class="error help-block"><%=@report.errors[:to_date].join(",") if @report && @report.errors[:to_date]%></span>
-        </div>
-        <div class="col-sm-12">
+          <div class="form-group col-md-6">
+          	To(Date)
+           <input class="form-control" type="text" name='to_date' id="to_date" placeholder="DD/MM/YY" value="<%=params[:to_date]%>">
+           <span class="error help-block"><%=@report.errors[:to_date].join(",") if @report && @report.errors[:to_date]%></span>
+         </div>
+         <div class="col-sm-12">
           <span class="help-block error"><%=@report.errors[:base].join(",") if @report && @report.errors[:base]%></span>
         </div>
-        <div class="col-sm-12 form-group" style="margin-top:20px;">
+         <div class="col-sm-12 form-group" style="margin-top:20px;">
           <input type="submit" value="Download CSV" class='blue-button'/>
         </div>
-      </div>
-    </form>
-</div>
+       </div>
 
 
-<script type="text/javascript">
+  <script type="text/javascript">
   jQuery(function($){
     $("#from_date, #to_date").datepicker({format: 'dd/mm/yyyy'})
   })
