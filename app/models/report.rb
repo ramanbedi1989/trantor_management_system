@@ -57,10 +57,7 @@ class Report
   end
 
  
-  def collect_attendance_data     
-    p "---"
-    p @attendances
-    p "--"
+  def collect_attendance_data        
      return {}  if @attendances.blank?
      attendance_info = {}
      @attendances.each do |attendance|
