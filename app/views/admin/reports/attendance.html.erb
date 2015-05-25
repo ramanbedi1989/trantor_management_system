@@ -1,0 +1,10 @@
+<div class="row">
+	<div class="col-sm-12">
+		<%=link_to "< Back to Report Page", admin_reports_path%>
+		<h1>Attendance Report</h1>
+	</div>
+	 <form role="form" action="<%=admin_reports_path(report_type: 'attendance')%>" method="POST">
+	 	<%=render :partial => 'form'%>
+	</form>
+</div>
+
