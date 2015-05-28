@@ -202,7 +202,7 @@ class User < ActiveRecord::Base
    user.email = record[5]
    user.current_contact      = record[6]
    user.emergency_contact_no = record[7]
-   user.date_of_birth        =  Date.strptime(record[8], "%m/%d/%Y")
+   user.date_of_birth        = record[8] #Date.strptime(record[8], "%m/%d/%Y")
    user.blood_group          = record[9]
    user.marriage_anniv_date  = record[10]
    user.pan               = record[11]
@@ -282,8 +282,8 @@ class User < ActiveRecord::Base
       file.write("\n")
       User.all.each do |user|
         fields = [
-          user.username, user.ecode, user.name, user.date_of_joining.strftime("%D"), user.bu, user.email, user.current_contact,
-          user.emergency_contact_no, user.date_of_birth.strftime("%D"), user.blood_group, (user.marriage_anniv_date ? user.marriage_anniv_date.strftime("%D") : '' ),
+          user.username, user.ecode, user.name, user.date_of_joining.strftime("%d/%m/%Y"), user.bu, user.email, user.current_contact,
+          user.emergency_contact_no, user.date_of_birth.strftime("%d/%m/%Y"), user.blood_group, (user.marriage_anniv_date ? user.marriage_anniv_date.strftime("%D") : '' ),
           user.pan,  user.card_no, user.designation.try(:name), user.grade.try(:name), (user.manager ? user.manager.ecode : '' ),
           user.confirmation.try(:name), user.gender.try(:name), user.marital_status.try(:name), user.lta_option.try(:name),
           user.projects.join(","), user.role, user.emp_type.try(:name), user.contractual_ecode, user.earned_leaves.count,
