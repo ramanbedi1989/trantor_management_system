@@ -1,10 +1,13 @@
 require 'increment_leaves'
+
 class User < ActiveRecord::Base
   ALLOWED_LEAVES = ["CL/EL/CompOff", "Sick Leave", "Present But Card Not Shown", "On Office Duty/Client Side", "Maternity Leave", "Half Day Sick Leave"]
+  
   ROLES = %w[employee manager admin]
+  
   devise :ldap_authenticatable, :rememberable, :trackable
 
-  validates :username, :role, :gender, :card_no, :ecode, :email, presence: true
+  validates :username, :role, :gender_id, :card_no, :ecode, :email, presence: true
   belongs_to :emp_type
   belongs_to :designation
   belongs_to :grade

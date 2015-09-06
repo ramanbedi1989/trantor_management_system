@@ -14,8 +14,15 @@ namespace :app do
   # rake app:create_managers
   task :create_managers => :environment do
     ['Gurdeep', 'Vibhor', 'Harish'].each do |user|
-      puts "--> Adding #{user}"
-      User.create!(username: user, name: user, role: 'manager', ecode:("E" + rand(500).to_s), gender_id: 1, card_no: (rand(999999).to_s), email: (user+"@trantorinc.com"))
+      User.create!(
+        username: user.downcase,
+        name: user, 
+        role: 'manager', 
+        ecode:("E" + rand(500).to_s), 
+        gender_id: 1, 
+        card_no: (rand(999999).to_s), 
+        email: (user+"@trantorinc.com")
+      )
     end
   end
 
