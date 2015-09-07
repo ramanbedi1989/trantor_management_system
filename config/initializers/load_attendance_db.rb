@@ -1,0 +1,1 @@
+DB_ATTENDANCE = YAML.load_file("#{Rails.root}/config/attendance.yml")['attendance']

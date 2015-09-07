@@ -1,0 +1,9 @@
+attendance:
+  adapter: mysql2
+  host: 123.123.123.123
+  port: 123132
+  timeout: 5000
+  pool: 25
+  username: root
+  password: 
+  database: dbname
