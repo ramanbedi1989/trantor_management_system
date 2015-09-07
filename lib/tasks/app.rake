@@ -10,8 +10,40 @@ namespace :app do
     end
   end
 
-  desc "This task will create users with manager role"
-  # rake app:create_managers
+  desc 'Create Admin User'
+  task :create_admin => :environment do
+    emptype = 
+    attributes = {
+      username: 'nidhi.ayri', ecode: 'E00015', name: "Nidhi Ayri", 
+      emp_type_id: EmpType.find_by(name: 'Full time').id,
+      designation_id: Designation.find_by(name: 'Manager - HR').id,
+      grade_id: Grade.find_by(name: 'L3').id,
+      date_of_joining: "16-Apr-2012",       
+      bu: "Support", 
+      prior_exp: 8, 
+      email: "nidhi.ayri@trantorinc.com",
+      confirmation_id: Confirmation.find_by(name: 'Confirmed').id,
+      status_id: Status.find_by(name: 'Active').id,
+      current_contact: '9803083292', 
+      emergency_contact_no: "9041393292", 
+      date_of_birth: "22/11/1980",
+      gender_id: Gender.find_by(name: 'Female').id, 
+      blood_group: "B+", 
+      marital_status_id: 1, 
+      marriage_anniv_date: "18/11/2005", 
+      pan: "BFTPS8845G",
+      lta_option_id: 1,
+      pf_no: nil, 
+      esi_no: nil, 
+      card_no: 6205802, 
+      active: true,                 
+      role: "admin"
+    } 
+    User.create!(attributes)
+    puts "Admin created successfully.".green
+  end
+
+  desc "Create Managers"
   task :create_managers => :environment do
     ['Gurdeep', 'Vibhor', 'Harish'].each do |user|
       User.create!(
@@ -26,45 +58,9 @@ namespace :app do
     end
   end
 
-  desc "Associate manager and project"
-  # rake app:create_project_user
+  desc "Associate projects with mangers"
   task :create_project_user => :environment do
     ProjectUser.create!(:user_id => User.first.id, :project_id => Project.first.id)
-  end
-
-  # rake app:create_admin
-  task :create_admin => :environment do
-     puts "==> Creating admin: Nidhi Ayri"
-     attributes = 
-      {
-        "username"=>"nidhi.ayri", 
-        "ecode"=>"E00015", 
-        "name"=>"Nidhi Ayri", 
-        "emp_type_id"=>1, 
-        "designation_id"=>20, 
-        "grade_id"=>3, 
-        "date_of_joining"=> "16-Apr-2012",       
-        "bu"=>"Support", 
-        "prior_exp"=>"8", 
-        "email"=>"nidhi.ayri@trantorinc.com", 
-        "confirmation_id"=>1, 
-        "status_id"=>1, 
-        "current_contact"=>"9803083292", 
-        "emergency_contact_no"=>"9041393292", 
-        "date_of_birth"=> "22/11/1980", 
-        "gender_id"=> 2, 
-        "blood_group"=>"B+", 
-        "marital_status_id"=>"1", 
-        "marriage_anniv_date"=> "18/11/2005", 
-        "pan"=>"BFTPS8845G",
-        "lta_option_id"=>1,
-        "pf_no"=>nil, 
-        "esi_no"=>nil, 
-        "card_no"=>6205802, 
-        "active"=>true,                 
-        "role"=>"admin"
-      } 
-      User.create!(attributes)
   end
 
 end

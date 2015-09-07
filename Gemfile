@@ -23,6 +23,7 @@ gem 'jquery-datatables-rails', '~> 2.2.3'
 gem 'whenever', :require => false
 gem 'rufus-scheduler'
 gem 'net-ldap'
+gem 'colorize'
 
 group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

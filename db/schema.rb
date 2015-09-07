@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150122082912) do
+ActiveRecord::Schema.define(version: 20150519065212) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "user_id",         limit: 4
@@ -194,7 +194,7 @@ ActiveRecord::Schema.define(version: 20150122082912) do
     t.string   "ifsc",                 limit: 255
     t.string   "bank_address",         limit: 255
     t.integer  "lta_option_id",        limit: 4
-    t.integer  "med_reimb_option_id",  limit: 4
+    t.string   "contractual_ecode",    limit: 255
     t.string   "pf_no",                limit: 255
     t.string   "esi_no",               limit: 255
     t.integer  "card_no",              limit: 4
