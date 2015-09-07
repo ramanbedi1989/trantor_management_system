@@ -44,8 +44,18 @@
   border-bottom: 5px solid #428bca;
   padding-top: 5px;
   padding-bottom: 5px;
-  margin-bottom: 10px;
-  height: 80px;
+  margin-bottom: 15px;
+  height: 95px;
+}
+
+.header .username, .managername{
+  float: right;
+  width: 67%;
+}
+
+.header .managername{
+  color: grey;
+  font-weight: bold;  
 }
 
 .leave_margin_bottom{

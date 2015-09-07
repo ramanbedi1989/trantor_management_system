@@ -142,7 +142,7 @@ class UsersController < ApplicationController
       redirect_to users_show_path(user.id), alert: "Reason is required."
       return
     end
-    
+
     if user && date_from && date_to && selected_option
       dates = (date_from..date_to).to_a
       leaves_deducted = Hash.new(0)
@@ -294,6 +294,8 @@ class UsersController < ApplicationController
       if check_status
         render json: leaves_deducted
       else
+        EmployeeEmails.approval_leave_request_email_to_manager(user, @leave_info)                  ##Mail to manager for approval
+
         EmployeeEmails.leave_applied(user, @leave_info).deliver
         redirect_to users_show_path(user.id), notice: "Leave successfully deducted."
       end
@@ -324,6 +326,7 @@ class UsersController < ApplicationController
         leave_info.cancelled = true
         message = "Your leaves have been canceled sucessfully."
       else
+        EmployeeEmails.cancellation_of_approved_leave_request_to_manager(user, leave_info)
         leave_info.cancel_request = true
         message = "Your leaves have been requested for cancellation."
       end

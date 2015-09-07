@@ -31,7 +31,8 @@
           <div class="col-sm-12">
             <div class="pull-right">
               <% if user_signed_in? %>
-              Hi <b><%= current_user.name %> </b>
+                <span class='username'>Hi <b><%= current_user.name %> </b></span>
+                <span class='managername'>Manager: <%=current_user.manager.try(:name) %></span>  
               <% end %>
             </div>
           </div>

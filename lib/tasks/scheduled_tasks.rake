@@ -84,8 +84,6 @@ namespace :scheduled_tasks do
     end
   end
 
-end
-
 # rake attendance
 task :attendance do
   puts "--> Executing the attendance fetching task"
