@@ -13,3 +13,5 @@ kill -9  $(cat tmp/pids/unicorn.pid)
 
 Note: If the server does not starts then start the server normally
 unicorn -p8888 and execute the first command (monitoring)
+
+== Production
