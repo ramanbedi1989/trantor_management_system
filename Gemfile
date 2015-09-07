@@ -36,3 +36,10 @@ end
 group :development, :test do
   gem "pry-rails"
 end
+
+group :production do
+  gem 'unicorn'
+  gem 'unicorn-rails'
+  gem 'exception_notification', '~> 4.1.0'
+  gem 'rails_12factor'
+end
