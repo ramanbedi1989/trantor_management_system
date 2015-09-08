@@ -4,7 +4,7 @@
 
 # Database Config
 config/database.yml
-#config/attendance.yml
+config/remote_db.yml
 
 # Logfiles and Tempfiles
 /log/*.log
