@@ -1,0 +1,11 @@
+.alert {
+  text-align: center;
+}
+
+.form-group.required .control-label:after {
+  content:"*";
+  color:red;
+  position: relative;
+  top: 2px;
+  //font-family: 'Glyphicons Halflings';
+}

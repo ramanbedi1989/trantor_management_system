@@ -1,9 +1,10 @@
-<p><%= @user.manager.name %>,</p>
+<% manager_name = @user.manager ? "Hello #{@user.manager.name}" : 'Hello' %>
+<p><%= manager_name %>,</p>
 <p>
   This is to inform you that <%= @user.name %> has applied leave from <%= format_date(@leave.date_from) %> to <%= format_date(@leave.date_to) %>. You are requested to approve/disapprove the same as applicable.
 </p>
 <p>
-  Leave applications pending for approval can be accessed at <%= link_to "here", managers_show_url(@user.manager) %>
+  Leave applications pending for approval can be accessed <%= link_to "here", managers_show_url(@user.manager) %>
 </p>
 <p>Regards,</p>
 <p>Team HR</p>
