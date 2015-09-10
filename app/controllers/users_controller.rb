@@ -297,7 +297,7 @@ class UsersController < ApplicationController
         EmployeeEmails.approval_leave_request_email_to_manager(user, @leave_info)                  ##Mail to manager for approval
 
         EmployeeEmails.leave_applied(user, @leave_info).deliver
-        redirect_to users_show_path(user.id), notice: "Leave successfully deducted."
+        redirect_to users_show_path(user.id), notice: "Leave successfully applied."
       end
     else
       if check_status
@@ -324,7 +324,7 @@ class UsersController < ApplicationController
     if user && leave_info
       if !leave_info.approved && !leave_info.rejected
         leave_info.cancelled = true
-        message = "Your leaves have been canceled sucessfully."
+        message = "Your leave has been canceled successfully."
       else
         EmployeeEmails.cancellation_of_approved_leave_request_to_manager(user, leave_info)
         leave_info.cancel_request = true
