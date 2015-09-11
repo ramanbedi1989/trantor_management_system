@@ -1,7 +1,6 @@
 require 'calculate_attendance'
 require 'increment_leaves'
 
-
 # rake scheduled_tasks:fetch_previous_day_attendance
 namespace :scheduled_tasks do
   desc "Fetch attendance for the previous day"
@@ -53,9 +52,7 @@ namespace :scheduled_tasks do
     task earned_leaves_reminder: :environment do
      users = User.all
       users.each do |user|
-        if user.earned_leaves.count == 33
-          EmployeeEmails.earned_leave_reminder(user).deliver
-        end
+        EmployeeEmails.earned_leave_reminder(user).deliver if user.earned_leaves.count == 33
       end 
     end
   end
@@ -75,20 +72,19 @@ namespace :scheduled_tasks do
 
   desc "Mail to managers about loss of pay" 
   task loss_of_pay_reminder_manager: :environment do
-      prev_month_date = (Date.today-1.month)+1.day
-      today = Date.today
-      users = User.users_with_loss_of_pays(prev_month_date, today)
-      managers = users.collect(&:manager).compact.uniq
-      managers.each do |manager|
-        EmployeeEmails.loss_of_pay_reminder_manager(manager).deliver
-      end
+    prev_month_date = (Date.today-1.month)+1.day
+    today = Date.today
+    users = User.users_with_loss_of_pays(prev_month_date, today)
+    managers = users.collect(&:manager).compact.uniq
+    managers.each do |manager|
+      EmployeeEmails.loss_of_pay_reminder_manager(manager).deliver
     end
   end
 
-
-# rake attendance
-task :attendance do
-  puts "--> Executing the attendance fetching task"
-  Rake::Task["scheduled_tasks:fetch_previous_day_attendance"].invoke 
-  puts "--> Task executed. Please check logs.."
+  desc 'Executing the attendance fetching task'
+  task :attendance do
+    puts "--> Executing the attendance fetching task"
+    Rake::Task["scheduled_tasks:fetch_previous_day_attendance"].invoke 
+    puts "--> Task executed. Please check logs.."
+  end
 end
