@@ -1,9 +1,0 @@
-attendance:
-  adapter: mysql2
-  host: <%= ENV['DB_HOST'] %>
-  port: <%= ENV['DB_PORT'] %>
-  timeout: 5000
-  pool: 25
-  username: <%= ENV['DB_USER'] %>
-  password: 
-  database: <%= ENV['DB_ATTN'] %>

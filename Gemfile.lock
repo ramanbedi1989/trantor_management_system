@@ -267,6 +267,3 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   underscore-rails
   whenever
-
-BUNDLED WITH
-   1.10.6
