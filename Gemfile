@@ -24,6 +24,7 @@ gem 'whenever', :require => false
 gem 'rufus-scheduler'
 gem 'net-ldap'
 gem 'colorize'
+gem 'passenger'
 
 group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -38,9 +39,5 @@ group :development, :test do
 end
 
 group :production do
-  gem 'pg'
-  gem 'unicorn'
-  gem 'unicorn-rails'
   gem 'exception_notification', '~> 4.1.0'
-  gem 'rails_12factor'
 end
