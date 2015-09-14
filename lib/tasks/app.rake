@@ -72,6 +72,7 @@ namespace :app do
         u.name = user
         u.role ='admin'
         u.ecode = ("E" + rand(500).to_s)
+        u.gender_id = Gender.find_by(name: 'Male').id
         u.card_no = (rand(999999).to_s)
         u.email = uname + "@trantorinc.com"
         u.confirmation_id = Confirmation.find_by(name: 'Confirmed').id
