@@ -1,4 +1,5 @@
 == Setup Application
+
 rake db:setup
 
 rake app:create_admin
