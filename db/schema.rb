@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150519065212) do
+ActiveRecord::Schema.define(version: 20151009124048) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "user_id",         limit: 4
@@ -209,6 +209,8 @@ ActiveRecord::Schema.define(version: 20150519065212) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "role",                 limit: 255
+    t.date     "last_working_day"
+    t.integer  "notice_period",        limit: 4
   end
 
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree

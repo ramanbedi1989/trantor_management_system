@@ -61,8 +61,6 @@ class User < ActiveRecord::Base
     projects.map(&:name).join(';')
   end
 
-#------------------------------------------------------------------------------------
-
   def casual_leaves
     self.leave_credits.where("leave_id =?", Leave.casual_leave.id)
   end
@@ -74,8 +72,6 @@ class User < ActiveRecord::Base
   def earned_leaves
     self.leave_credits.where("leave_id =?", Leave.earned_leave.id)
   end
-
-#------------------------------------------------------------------------------------
 
   # 2 casual 2 sick
   def increment_leaves(n)
@@ -157,10 +153,7 @@ class User < ActiveRecord::Base
       end
     destroy_sick_leaves(delete_count)
   end
-
-#------------------------------------------------------------------------------------
-
-
+  
   def destroy_sick_leaves(delete_count)
     sick_leaves = self.leave_credits.where("leave_id =?", Leave.sick_leave.id).order('created_at')
     if delete_count == nil      
@@ -174,25 +167,20 @@ class User < ActiveRecord::Base
       sick_leaves[i].destroy
     end
   end
-
-#------------------------------------------------------------------------------------
-
+  
   def destroy_casual_leaves(delete_count)
     casual_leaves = self.leave_credits.where("leave_id =?", Leave.casual_leave.id)
      delete_count.times do |i|
       casual_leaves[i].destroy
     end
   end
-
- def self.users_with_loss_of_pays(from, to)
-  return LossOfPayInfo.joins(:attendance => :user)
-  .where("Date(loss_of_pay_infos.created_at) >= ? AND Date(loss_of_pay_infos.created_at) <= ?", from, to)
-  .collect(&:user)
- end 
-
-#------------------------------------------------------------------------------------
-
-
+  
+  def self.users_with_loss_of_pays(from, to)
+    return LossOfPayInfo.joins(:attendance => :user)
+      .where("Date(loss_of_pay_infos.created_at) >= ? AND Date(loss_of_pay_infos.created_at) <= ?", from, to)
+      .collect(&:user)
+  end
+ 
   def self.import_user(comma_separated_values)
    require 'activerecord-import'
    record = comma_separated_values.split(",")
