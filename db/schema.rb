@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151009124048) do
+ActiveRecord::Schema.define(version: 20151016104558) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "user_id",         limit: 4
@@ -69,6 +69,16 @@ ActiveRecord::Schema.define(version: 20151009124048) do
     t.boolean  "day_shift",  limit: 1
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "kras", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.string   "target",     limit: 255
+    t.datetime "start_data"
+    t.datetime "end_data"
+    t.text     "commetns",   limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "leave_credits", force: :cascade do |t|
