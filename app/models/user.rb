@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   devise :ldap_authenticatable, :rememberable, :trackable
 
   validates :username, :role, :gender_id, :card_no, :ecode, :email, presence: true
+  validates :ecode, uniqueness: true
 
   belongs_to :emp_type
   belongs_to :designation

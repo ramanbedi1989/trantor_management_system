@@ -1,8 +1,8 @@
 class Admin::UsersController < ApplicationController
 
   def import
-	  if request.post?
-	    if params[:file] && !params[:file].path.empty?
+    if request.post?
+      if params[:file] && !params[:file].path.empty?
         CSV.foreach(params[:file].path, {headers: true, skip_blanks: true}) do |row|
           
           csv_user = OpenStruct.new(row.to_hash)
@@ -10,12 +10,14 @@ class Admin::UsersController < ApplicationController
           u = User.find_by(ecode: csv_user.ecode)
           u = User.new unless u
           
-          u.username = csv_user.username
+          u.username = csv_user.username.downcase
           u.ecode = csv_user.ecode
           u.name = csv_user.name
           u.email = csv_user.email
           u.date_of_joining = csv_user.date_of_joining
           u.prior_exp = csv_user.prior_exp
+          u.trantor_exp = csv_user.trantor_exp
+          u.total_exp = csv_user.total_exp
           u.current_contact = csv_user.current_contact
           u.emergency_contact_no = csv_user.emergency_contact_no
           u.date_of_birth = csv_user.date_of_birth
@@ -78,22 +80,22 @@ class Admin::UsersController < ApplicationController
           end
           
         end # CSV Loop Ends
-	      flash.now[:notice] = "Users imported successfully"
-	      redirect_to '/admin/users/import'
-	    else
-	      flash.now[:notice] = "Please provide a valid CSV."
-	    end
-	  end
-	  
-	end
+        flash[:notice] = "Users imported successfully"
+        redirect_to '/admin/users/import'
+      else
+        flash.now[:notice] = "Please provide a valid CSV."
+      end
+    end
+    
+  end
 
-	def export
-		if request.post?
-			file = User.export_all
-			send_file(file)    
-		else
-			@users = User.all
-		end
-		
-	end
+  def export
+    if request.post?
+      file = User.export_all
+      send_file(file)    
+    else
+      @users = User.all
+    end
+    
+  end
 end
