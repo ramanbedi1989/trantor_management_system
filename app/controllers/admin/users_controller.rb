@@ -29,7 +29,7 @@ class Admin::UsersController < ApplicationController
             u.contractual_ecode = csv_user.contractual_ecode
             u.card_no = csv_user.card_no
             u.active = true
-            u.role = csv_user.role
+            u.role = csv_user.role.downcase
             u.bu = csv_user.bu
             u.last_working_day = csv_user.last_working_day
             u.notice_period= csv_user.notice_period
