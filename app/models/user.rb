@@ -293,4 +293,17 @@ class User < ActiveRecord::Base
     return filename
   end
 
+  private
+
+    def set_trantor_and_prior_exp
+      
+      if date_of_joining.present?
+        te = Time.diff(Date.today, date_of_joining)
+        self.trantor_exp = "#{te[:year]}.#{te[:month]}".to_f
+      end
+
+      self.total_exp = self.trantor_exp.to_f + self.prior_exp.to_f
+      
+    end
+
 end
