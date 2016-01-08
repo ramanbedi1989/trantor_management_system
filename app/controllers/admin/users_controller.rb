@@ -18,8 +18,6 @@ class Admin::UsersController < ApplicationController
             u.email = csv_user.email
             u.date_of_joining = csv_user.date_of_joining
             u.prior_exp = csv_user.prior_exp
-            u.trantor_exp = csv_user.trantor_exp
-            u.total_exp = csv_user.total_exp
             u.current_contact = csv_user.current_contact
             u.emergency_contact_no = csv_user.emergency_contact_no
             u.date_of_birth = csv_user.date_of_birth

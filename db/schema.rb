@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151016104558) do
+ActiveRecord::Schema.define(version: 20160106084939) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "user_id",         limit: 4
@@ -181,7 +181,7 @@ ActiveRecord::Schema.define(version: 20151016104558) do
     t.integer  "emp_type_id",          limit: 4
     t.integer  "designation_id",       limit: 4
     t.integer  "grade_id",             limit: 4
-    t.datetime "date_of_joining"
+    t.date     "date_of_joining"
     t.integer  "manager_id",           limit: 4
     t.string   "bu",                   limit: 255
     t.string   "total_exp",            limit: 255
@@ -193,7 +193,7 @@ ActiveRecord::Schema.define(version: 20151016104558) do
     t.integer  "location_id",          limit: 4
     t.string   "current_contact",      limit: 255
     t.string   "emergency_contact_no", limit: 255
-    t.datetime "date_of_birth"
+    t.date     "date_of_birth"
     t.integer  "gender_id",            limit: 4
     t.string   "blood_group",          limit: 255
     t.string   "marital_status_id",    limit: 255
