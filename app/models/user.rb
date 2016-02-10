@@ -8,7 +8,8 @@ class User < ActiveRecord::Base
   
   devise :ldap_authenticatable, :rememberable, :trackable
 
-  validates :username, :role, :gender_id, :card_no, :ecode, :email, presence: true
+  validates :username, :role, :ecode, :email, presence: true
+  validates :ecode, uniqueness: true
 
   belongs_to :emp_type
   belongs_to :designation
@@ -291,5 +292,18 @@ class User < ActiveRecord::Base
     end
     return filename
   end
+
+  private
+
+    def set_trantor_and_prior_exp
+      
+      if date_of_joining.present?
+        te = Time.diff(Date.today, date_of_joining)
+        self.trantor_exp = "#{te[:year]}.#{te[:month]}".to_f
+      end
+
+      self.total_exp = self.trantor_exp.to_f + self.prior_exp.to_f
+      
+    end
 
 end
