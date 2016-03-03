@@ -96,7 +96,7 @@ class Admin::UsersController < ApplicationController
   def export
     if request.post?
       file = User.export_all
-      send_file(file)    
+      send_file(file)
     else
       @users = User.all
     end
