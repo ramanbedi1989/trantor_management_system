@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.2.2'
 
 gem 'rails', '4.2.1'
-gem 'mysql2'
+gem 'mysql2', '~> 0.3.18'
 
 gem 'bootstrap-sass', '~> 3.2.0'
 gem 'sass-rails', '~> 4.0.3'
@@ -20,7 +20,7 @@ gem 'less-rails'
 gem 'bootstrap-datepicker-rails'
 gem 'cancan'
 gem 'jquery-datatables-rails', '~> 2.2.3'
-gem 'whenever', :require => false
+gem 'whenever', require: false
 gem 'rufus-scheduler'
 gem 'net-ldap'
 gem 'colorize'
@@ -35,7 +35,7 @@ group :development do
 end
 
 group :development, :test do
-  gem "pry-rails"
+  gem 'pry-byebug'
 end
 
 group :production do

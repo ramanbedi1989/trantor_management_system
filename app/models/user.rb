@@ -262,8 +262,9 @@ class User < ActiveRecord::Base
 
 
   def calculate_trantor_exp
-     val = ((Date.today-self.date_of_joining.to_date).to_i)/365.to_f
-     val.round(1)
+    return 0 unless self.date_of_joining
+    val = ((Date.today - self.date_of_joining.to_date).to_i)/365.to_f
+    val.round(1)
   end
 
   def calculate_total_exp
