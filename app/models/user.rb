@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   has_many :leave_infos, :dependent => :destroy
 
 
-  EXPORT_FIELDS = ["User Name", "E-Code", "Name", "Date of Joining", "BU", "Email", "Current Contact", "Emergency Contact No", "Date of Birth", "Blood Group", "Marriage Anniversary", "PAN", "Card No", "Designation", "Grade", "Manager Ecode", "Confirmation", "Gender", "Marital Status", "LTA Option", "Projects", "Role", "Emp Type", "Contractual Ecode", "Earned Leaves", "Casual Leaves", "Sick Leaves", "Prior Exp", "Trantor Exp", "Total Exp", "Status"]
+  EXPORT_FIELDS = ['E-Code', 'Contractual Ecode', 'Status', 'Name', 'Designation', 'Band / Grade', 'Date of Joining', 'Projects', 'BU', 'Manager', 'Manager Ecode', 'Confirmation Status', 'User Name', 'Email', 'Card No', 'Role', 'Emp Type', 'Earned Leaves', 'Casual Leaves', 'Sick Leaves', 'Current Contact', 'Emergency Contact No', 'Date of Birth', 'Blood Group', 'Marriage Anniversary', 'PAN', 'Manager Ecode', 'Gender', 'Marital Status', 'LTA Option', 'Prior Exp', 'Trantor Exp', 'Total Exp']
 
   def manager?
     if User.find_by_manager_id(self.id)
@@ -274,37 +274,39 @@ class User < ActiveRecord::Base
       file.write("\n")
       User.all.each do |user|
         fields = []
-        fields << user.username
         fields << user.ecode
+        fields << user.contractual_ecode
+        fields << user.status.try(:name)
         fields << user.name
+        fields << user.designation.try(:name)
+        fields << user.grade.try(:name)
         fields << (user.date_of_joining ? user.date_of_joining.strftime("%d/%m/%Y") : 'Not Available')
+        fields << (user.projects.present? ? user.projects.join(",") : 'Not Available')
         fields << user.bu
+        fields << (user.manager ? user.manager.name : 'Not Available')
+        fields << (user.manager ? user.manager.ecode : 'Not Available')
+        fields << user.confirmation.try(:name)
+        fields << user.username
         fields << user.email
+        fields << user.card_no
+        fields << user.role
+        fields << user.emp_type.try(:name)
+        fields << user.earned_leaves.count
+        fields << user.casual_leaves.count
+        fields << user.sick_leaves.count
         fields << user.current_contact
         fields << user.emergency_contact_no
         fields << (user.date_of_birth ? user.date_of_birth.strftime("%d/%m/%Y") : 'Not Available')
         fields << user.blood_group
         fields << (user.marriage_anniv_date ? user.marriage_anniv_date.strftime("%D") : 'Not Available')
         fields << user.pan
-        fields << user.card_no
-        fields << user.designation.try(:name)
-        fields << user.grade.try(:name)
-        fields << (user.manager ? user.manager.ecode : 'Not Available')
-        fields << user.confirmation.try(:name)
         fields << user.gender.try(:name)
         fields << user.marital_status.try(:name)
         fields << user.lta_option.try(:name)
-        fields << (user.projects.present? ? user.projects.join(",") : 'Not Available')
-        fields << user.role
-        fields << user.emp_type.try(:name)
-        fields << user.contractual_ecode
-        fields << user.earned_leaves.count
-        fields << user.casual_leaves.count
-        fields << user.sick_leaves.count
         fields << user.prior_exp.to_f
+
         fields << user.calculate_trantor_exp
         fields << user.calculate_total_exp
-        fields << user.status.try(:name)
 
         fields = fields.join(",")
         file.write(fields)

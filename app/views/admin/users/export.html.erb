@@ -10,42 +10,43 @@
 			<table class='table table-bordered'>
 				<thead>
 					<% User::EXPORT_FIELDS.each do |field|%>
-						<th><%=field.gsub("_", " ").capitalize%></th>
+						<th><%= field %></th>
 					<% end %>
 				</thead>
 				<% @users.each do |user|%>
 				<tr>
-					<td><%= user.username %></td>		
-					<td><%= user.ecode %></td>
+					<td><%= user.ecode %></td>		
+					<td><%= user.contractual_ecode %></td>
+					<td><%= user.status.try(:name) %></td>
 					<td><%= user.name %></td>
-					<td><%= user.date_of_joining ? user.date_of_joining.strftime("%D") : '' %></td>
-					<td><%= user.bu %></td>
-					<td><%= user.email %></td>
-					<td><%= user.current_contact %></td>
-					<td><%= user.emergency_contact_no %></td>
-					<td><%= user.date_of_birth ? user.date_of_birth.strftime("%D") : '' %></td>
-					<td><%= user.blood_group %></td>
-					<td><%= user.marriage_anniv_date ? user.marriage_anniv_date.strftime("%D") : '' %></td>
-					<td><%= user.pan %></td>
-					<td><%= user.card_no %></td>
 					<td><%= user.designation.try(:name) %></td>
 					<td><%= user.grade.try(:name) %></td>
-					<td><%= user.manager ? user.manager.ecode : '' %></td>
+					<td><%= user.date_of_joining ? user.date_of_joining.strftime("%d/%m/%Y") : 'Not Available' %></td>
+					<td><%= user.projects.present? ? user.projects.join(",") : 'Not Available' %></td>
+					<td><%= user.bu %></td>
+					<td><%= user.manager ? user.manager.name : 'Not Available' %></td>
+					<td><%= user.manager ? user.manager.ecode : 'Not Available' %></td>
 					<td><%= user.confirmation.try(:name) %></td>
-					<td><%= user.gender.try(:name) %></td>
-					<td><%= user.marital_status.try(:name) %></td>
-					<td><%= user.lta_option.try(:name) %></td>
-					<td><%= user.projects.join(",") %></td>
+					<td><%= user.username %></td>
+					<td><%= user.email %></td>
+					<td><%= user.card_no %></td>
 					<td><%= user.role %></td>
 					<td><%= user.emp_type.try(:name) %></td>
-					<td><%= user.contractual_ecode %></td>
 					<td><%= user.earned_leaves.count %></td>
 					<td><%= user.casual_leaves.count %></td>
 					<td><%= user.sick_leaves.count %></td>
+					<td><%= user.current_contact %></td>
+					<td><%= user.emergency_contact_no %></td>
+					<td><%= user.date_of_birth ? user.date_of_birth.strftime("%d/%m/%Y") : 'Not Available' %></td>
+					<td><%= user.blood_group %></td>
+					<td><%= user.marriage_anniv_date ? user.marriage_anniv_date.strftime("%D") : 'Not Available' %></td>
+					<td><%= user.pan %></td>
+					<td><%= user.gender.try(:name) %></td>
+					<td><%= user.marital_status.try(:name) %></td>
+					<td><%= user.lta_option.try(:name) %></td>
 					<td><%= user.prior_exp %></td>
 					<td><%= user.calculate_trantor_exp %></td>
-					<td><%= user.calculate_total_exp %></td>
-					<td><%= user.status.try(:name) %></td>
+          <td><%= user.calculate_total_exp %></td>
 				</tr>
 				<% end %>
 			</table>
