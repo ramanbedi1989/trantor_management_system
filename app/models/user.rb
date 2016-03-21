@@ -31,7 +31,9 @@ class User < ActiveRecord::Base
   has_many :leave_infos, :dependent => :destroy
 
 
-  EXPORT_FIELDS = ['E-Code', 'Contractual Ecode', 'Status', 'Name', 'Designation', 'Band / Grade', 'Date of Joining', 'Projects', 'BU', 'Manager', 'Manager Ecode', 'Confirmation Status', 'User Name', 'Email', 'Card No', 'Role', 'Emp Type', 'Earned Leaves', 'Casual Leaves', 'Sick Leaves', 'Current Contact', 'Emergency Contact No', 'Date of Birth', 'Blood Group', 'Marriage Anniversary', 'PAN', 'Manager Ecode', 'Gender', 'Marital Status', 'LTA Option', 'Prior Exp', 'Trantor Exp', 'Total Exp']
+  EXPORT_FIELDS = ['E-Code', 'Contractual Ecode', 'Status', 'Name', 'Designation', 'Band / Grade', 'Date of Joining', 'Projects', 'BU', 'Manager', 'Manager Ecode', 'Confirmation Status', 'User Name', 'Email', 'Card No', 'Role', 'Emp Type', 'Earned Leaves', 'Casual Leaves', 'Sick Leaves', 'Current Contact', 'Emergency Contact No', 'Date of Birth', 'Blood Group', 'Marriage Anniversary', 'PAN', 'Gender', 'Marital Status', 'LTA Option', 'Prior Exp', 'Trantor Exp', 'Total Exp']
+
+  CSV_HEADER = ['ecode', 'contractual_ecode', 'status', 'name', 'designation', 'grade', 'date_of_joining', 'projects', 'bu', 'manager', 'manager_ecode', 'confirmation_status', 'username', 'email', 'card_no', 'role', 'emp_type', 'earned_leaves', 'casual_leaves', 'sick_leaves', 'current_contact', 'emergency_contact_no', 'date_of_birth', 'blood_group', 'marriage_anniv_date', 'pan', 'gender', 'marital_status', 'lta_option', 'prior_exp', 'trantor_exp', 'total_exp']
 
   def manager?
     if User.find_by_manager_id(self.id)
@@ -270,7 +272,7 @@ class User < ActiveRecord::Base
     filename = "#{Rails.root}/tmp/users.csv"
 
     File.open(filename, 'w') do |file|
-      file.write("#{EXPORT_FIELDS.join(",")}")
+      file.write("#{CSV_HEADER.join(",")}")
       file.write("\n")
       User.all.each do |user|
         fields = []

@@ -45,11 +45,11 @@ class Admin::UsersController < ApplicationController
             u.grade_id = grade.id
             
             # manager_id
-            manager = User.find_by(ecode: csv_user.ecode)
+            manager = User.find_by(ecode: csv_user.manager_ecode)
             u.manager_id = manager.id if manager
             
             # confirmation_id
-            confirmation = Confirmation.find_or_create_by(name: csv_user.confirmation)
+            confirmation = Confirmation.find_or_create_by(name: csv_user.confirmation_status)
             u.confirmation_id = confirmation.id
             
             # status_id
